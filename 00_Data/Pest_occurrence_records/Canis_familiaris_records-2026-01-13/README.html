@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://www.ala.org.au/commonui-bs3-2019/css/ala-styles.css" rel="stylesheet"
+          media="screen,print"/>
+    <!--<title>Title</title>-->
+    <style>
+        /* The only override we need from ala-styles.css */
+
+        body {
+            padding-top: 0px;
+        }
+
+        /* DOI - taken from GBIF */
+        .doi {
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 4px 6px;
+            white-space:nowrap;
+            white-space:nowrap;
+        }
+        .doi-sm {
+            font-size: 13px;
+            padding: 2px 0;
+        }
+        .doi span:first-of-type {
+            -webkit-transition: all .3s ease;
+            transition: all .3s ease;
+            background: #D5502A ;
+            /*#09c;*/
+            padding: 4px 6px;
+            /*border-radius: 5px 0 0 5px;*/
+            color: #fff;
+            border-right-width: 0;
+            border-color:#D5502A;
+            /*#09c;*/
+        }
+        .doi span:last-of-type {
+            color: #333;
+            background: #fff;
+            text-decoration: none;
+            padding: 4px 6px;
+            /*border-radius: 0 5px 5px 0;*/
+            border-left-width: 0;
+        }
+        .doi span {
+            border: 1px solid #adadad;
+        }
+        .doi:hover span:first-of-type {
+            background: #D5502A;
+            /*#004d66; */
+            border-color: #D5502A;
+            /*#004d66;*/
+        }
+        .doi:hover span:last-of-type {
+            background: #f9f9f9;
+        }
+
+    </style>
+</head>
+<body>
+When using this dataset please use the following citation:<br><br>
+<cite>Atlas of Living Australia occurrence download at <a href='https://biocache.ala.org.au/occurrences/search?&q=lsid%3Ahttps%3A%2F%2Fbiodiversity.org.au%2Fafd%2Ftaxa%2Fc2056f1b-fcde-45b9-904b-1cab280368d1&fq=%28occurrence_decade_i%3A%221990%22+OR+occurrence_decade_i%3A%222000%22+OR+occurrence_decade_i%3A%222010%22+OR+occurrence_decade_i%3A%222020%22%29&fq=state%3A%22Queensland%22&disableAllQualityFilters=true&fq=-basisOfRecord%3A%22FOSSIL_SPECIMEN%22+AND+-%28basisOfRecord%3A%22MATERIAL_SAMPLE%22+AND+contentTypes%3A%22Environmental+DNA%22%29&fq=-%28duplicate_status%3A%22ASSOCIATED%22+AND+duplicateType%3A%22DIFFERENT_DATASET%22%29&fq=-degreeOfEstablishment%3A%22cultivated%22+AND+-degreeOfEstablishment%3A%22captive%22&fq=-assertions%3ATAXON_MATCH_NONE+AND+-assertions%3AINVALID_SCIENTIFIC_NAME+AND+-assertions%3ATAXON_HOMONYM+AND+-assertions%3AUNKNOWN_KINGDOM+AND+-assertions%3ATAXON_SCOPE_MISMATCH&fq=-occurrenceStatus%3AABSENT&fq=-identificationVerificationStatus%3A%22needs_id%22&fq=-year%3A%5B*+TO+1700%5D&fq=-userAssertions%3A50001+AND+-userAssertions%3A50005&fq=-decimalLatitude%3A0+AND+-decimalLongitude%3A0+AND+-assertions%3A%22PRESUMED_SWAPPED_COORDINATE%22+AND+-assertions%3A%22COORDINATES_CENTRE_OF_STATEPROVINCE%22+AND+-assertions%3A%22COORDINATES_CENTRE_OF_COUNTRY%22+AND+-assertions%3A%22PRESUMED_NEGATED_LATITUDE%22+AND+-assertions%3A%22PRESUMED_NEGATED_LONGITUDE%22&fq=-outlierLayerCount%3A%5B3+TO+*%5D&fq=-spatiallyValid%3A%22false%22&fq=-coordinateUncertaintyInMeters%3A%5B10001+TO+*%5D&qc=-_nest_parent_%3A*'>https://biocache.ala.org.au/occurrences/search?&q=lsid%3Ahttps%3A%2F%2Fbiodiversity.org.au%2Fafd%2Ftaxa%2Fc2056f1b-fcde-45b9-904b-1cab280368d1&fq=%28occurrence_decade_i%3A%221990%22+OR+occurrence_decade_i%3A%222000%22+OR+occurrence_decade_i%3A%222010%22+OR+occurrence_decade_i%3A%222020%22%29&fq=state%3A%22Queensland%22&disableAllQualityFilters=true&fq=-basisOfRecord%3A%22FOSSIL_SPECIMEN%22+AND+-%28basisOfRecord%3A%22MATERIAL_SAMPLE%22+AND+contentTypes%3A%22Environmental+DNA%22%29&fq=-%28duplicate_status%3A%22ASSOCIATED%22+AND+duplicateType%3A%22DIFFERENT_DATASET%22%29&fq=-degreeOfEstablishment%3A%22cultivated%22+AND+-degreeOfEstablishment%3A%22captive%22&fq=-assertions%3ATAXON_MATCH_NONE+AND+-assertions%3AINVALID_SCIENTIFIC_NAME+AND+-assertions%3ATAXON_HOMONYM+AND+-assertions%3AUNKNOWN_KINGDOM+AND+-assertions%3ATAXON_SCOPE_MISMATCH&fq=-occurrenceStatus%3AABSENT&fq=-identificationVerificationStatus%3A%22needs_id%22&fq=-year%3A%5B*+TO+1700%5D&fq=-userAssertions%3A50001+AND+-userAssertions%3A50005&fq=-decimalLatitude%3A0+AND+-decimalLongitude%3A0+AND+-assertions%3A%22PRESUMED_SWAPPED_COORDINATE%22+AND+-assertions%3A%22COORDINATES_CENTRE_OF_STATEPROVINCE%22+AND+-assertions%3A%22COORDINATES_CENTRE_OF_COUNTRY%22+AND+-assertions%3A%22PRESUMED_NEGATED_LATITUDE%22+AND+-assertions%3A%22PRESUMED_NEGATED_LONGITUDE%22&fq=-outlierLayerCount%3A%5B3+TO+*%5D&fq=-spatiallyValid%3A%22false%22&fq=-coordinateUncertaintyInMeters%3A%5B10001+TO+*%5D&qc=-_nest_parent_%3A*</a> accessed on 13 January 2026.</cite> <br><br>
+The DOI for this download is available at <a href='https://doi.org/10.26197/ala.8ea3fe93-1042-4a1b-ae56-49146d0d1393'>https://doi.org/10.26197/ala.8ea3fe93-1042-4a1b-ae56-49146d0d1393</a><br><br>
+Data contributed by the following providers:<br>
+<ul><li>Records provided by Department of Planning, Industry and Environment representing the State of New South Wales, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp34</li><li>Records provided by South Australia, Department for Environment and Water, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp32</li><li>Records provided by Questagame, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp52</li><li>Records provided by Queensland Museum Mammals, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/co150</li><li>Records provided by Northern Territory Department of Environment and Natural Resources, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp30</li><li>Observation.org (2024). Observation.org, Nature data from around the World. Occurrence dataset https://doi.org/10.15468/5nilie accessed via GBIF.org on 2024-12-19. (CC BY-NC). For more information: https://collections.ala.org.au/public/show/dr22510</li><li>Records provided by Australian Museum Mammalogy Collection, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/co80</li><li>Records provided by NatureMapr, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp3301</li><li>The State of Queensland DETSI (2025) WildNet. (Creative Commons Attribution (International) (CC-BY 4.0 (Int))). For more information: https://collections.ala.org.au/public/show/dr1132</li><li>Queensland Museum, http://www.qm.qld.gov.au/ (CC-BY). For more information: https://collections.ala.org.au/public/show/dr344</li><li>© Crown in right of the State of South Australia, Department of Environment, Water and Natural Resources. (Creative Commons Attribution (International) (CC-BY 4.0 (Int))). For more information: https://collections.ala.org.au/public/show/dr365</li><li>BioNet Species Sightings occurrence data held by the NSW Office of Environment and Heritage (OEH).   The BioNet repository holds data from a number of sources and custodians. (Accessed through ALA Data Portal,<Date of Access>). (Creative Commons Attribution (International) (CC-BY 4.0 (Int))). For more information: https://collections.ala.org.au/public/show/dr368</li><li>iNaturalist.org: iNaturalist Research-grade Observations. doi:10.15468/ab3s5x
+Accessed via http://www.gbif.org/dataset/50c9509d-22c7-4a22-a47d-8c48425ef4a7 on 2017-03-16 (). For more information: https://collections.ala.org.au/public/show/dr1411</li><li>Records provided by Australian Museum provider for OZCAM, accessed through ALA website. (Creative Commons Attribution (Australia) (CC-BY 3.0 (Au)) Australian Museum,https://australian.museum/ Creative Commons Attribution (Australia) (CC-BY 3.0 (Au) 3.0)). For more information: https://collections.ala.org.au/public/show/dr340</li><li>Data supplied by Dept. Natural Resources, Environment, The Arts and Sport. Northern Territory of Australia (Creative Commons Attribution (Australia) (CC-BY 3.0 (Au)) Data supplied is licensed under the Creative Commons Attribution 3.0 Australia License.). For more information: https://collections.ala.org.au/public/show/dr361</li><li>Individual sighting: Atlas of Living Australia (2025) Individual sighting dataset
+Test sighting: Atlas of Living Australia (2025) Test sighting dataset
+ (CC-BY). For more information: https://collections.ala.org.au/public/show/dr364</li><li>Australian National Wildlife Collection, CSIRO, http://www.csiro.au/ (CC-BY Data is available under the Creative Commons Attribution 3.0 Australia license.  Sound files associated with specimen records are not available for download and re-use. Please contact the Australian National Wildlife Collection for more information.). For more information: https://collections.ala.org.au/public/show/dr341</li><li>Mertz W, Ludt W, Clardy T, Robson S, Suh Y H, Camacho N (2024). LACM Vertebrate Collection. Version 18.15. Natural History Museum of Los Angeles County. Occurrence dataset https://doi.org/10.15468/77rmwd accessed via GBIF.org on 2025-02-12. (Creative Commons Zero (CC0)). For more information: https://collections.ala.org.au/public/show/dr30012</li><li>Arthur D. Chapman, March 2012 (CC-BY-NC). For more information: https://collections.ala.org.au/public/show/dr746</li><li>Records provided by Global Biodiversity Information Facility, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp42</li><li>Records provided by OZCAM (Online Zoological Collections of Australian Museums) Provider, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp20</li><li>Records provided by Logan City Council Species Sightings, accessed through ALA website. (Creative Commons Attribution (International) (CC-BY 4.0 (Int)) Logan City Council, Queensland). For more information: https://collections.ala.org.au/public/show/dr2592</li><li>Wairambar Rainforest (https://sites.google.com/view/wairambarrainforest) (Creative Commons Attribution (Australia) (CC-BY 3.0 (Au))). For more information: https://collections.ala.org.au/public/show/dr8798</li><li>Citation is at the individual image (Creative Commons - license at record level (Creative Commons - license at record level)). For more information: https://collections.ala.org.au/public/show/dr360</li><li>Records provided by Wildlife Observatory of Australia, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp5214</li><li>Records provided by Australian Museum, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/in4</li><li>Records provided by Commonwealth Scientific and Industrial Research Organisation, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/in6</li><li>Records provided by NatureMapr, accessed through ALA website. (Creative Commons Attribution (Australia) (CC-BY 3.0 (Au)) Creative Commons Attribution 3.0 (Australia)). For more information: https://collections.ala.org.au/public/show/dr19123</li><li>Records provided by Queensland Museum, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/in15</li><li>Records provided by Camera trap surveys in Queensland's Wet Tropics 2022-2023, accessed through ALA website. (Creative Commons Attribution (International) (CC-BY 4.0 (Int))). For more information: https://collections.ala.org.au/public/show/dr31594</li><li>Records provided by Earth Guardians Weekly Feed, accessed through ALA website. (Creative Commons Attribution-Noncommercial (International) (CC-BY-NC 4.0 (Int))). For more information: https://collections.ala.org.au/public/show/dr1902</li><li>Records provided by Flickr, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/dp29</li><li>Records provided by Australian National Wildlife Collection, accessed through ALA website. (). For more information: https://collections.ala.org.au/public/show/co16</li></ul><br>
+More information can be found at <a href="https://support.ala.org.au/support/solutions/articles/6000261662-citing-the-ala">citing the ALA</a>.<br><br>
+</body>
+</html>
+For more information about the fields that are being downloaded please consult <a href='headings.csv'>Download Fields</a>.
