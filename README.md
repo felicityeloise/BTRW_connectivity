@@ -5,7 +5,7 @@ This project aimed to identify key habitat patches and potential movement corrid
 
 
 # Content Description
-00_Data: Occurrence records and spatial data information
+00_Data: Occurrence records and spatial data
 01_Scripts: Scripts for processing and analysis
 02_Functions: All functions used in processing and analysis
 03_Results: Plots and other outputs produced during analysis
