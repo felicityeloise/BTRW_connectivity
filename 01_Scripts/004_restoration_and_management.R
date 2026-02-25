@@ -51,7 +51,7 @@ BTRW_coords$y <- as.numeric(BTRW_pres[,5])
 BTRW_cds <- vect(BTRW_coords, geom = c("x", "y"), crs = "EPSG:4326") %>% 
   project('EPSG:3577')
 
-Aus <- vect('./00_Data/Australia_shapefile/STE11aAust.shp') %>% 
+Aus <- vect('./00_Data/Australia_shapefile/STE_2021_AUST_GDA2020.shp') %>% 
   project("EPSG:3577") %>% 
   crop(e)
 
@@ -168,20 +168,27 @@ plot(BTRW_pop_buf); BTRW_pop_buf
 
 # 5. Stepping stone habitat or corridor creation ----
 BTRW_pops; plot(BTRW_pops)
-# 5.1 Identify populations with low connectivity (less than 75% connectivity) ----
+# 5.1 Identify populations with low connectivity (below the 75th position between min and max connectivity) ----
 HSM_cur <- rast('./03_Results/Resistance_surfaces/Habitat_suitability/Habitat_suitability_output_cum_curmap.asc') %>% 
   mask(Aus) 
-HSM_cur <-  ifel(HSM_cur >100, 100, HSM_cur)
+HSM_q99 <- global(HSM_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+HSM_win <- clamp(HSM_cur, upper = HSM_q99, values = T)
+mn_HSM <- global(HSM_win, "min", na.rm = T)[[1]]
+mx_HSM <- global(HSM_win, "max", na.rm = T)[[1]]
+HSM_cur <- (HSM_win - mn_HSM)/ (mx_HSM - mn_HSM)
+HSM_cur; plet(HSM_cur)
+
+
 BTRW_pop_con <- extract(HSM_cur, BTRW_pops)
 unique(round((BTRW_pop_con$Habitat_suitability_output_cum_curmap)))
 
-BTRW_pops$connected <- ifelse(BTRW_pop_con$Habitat_suitability_output_cum_curmap <= 75, 0, 1) # If this is failing to run, check version of terra as updated versions throw an error at this line
+BTRW_pops$connected <- ifelse(BTRW_pop_con$Habitat_suitability_output_cum_curmap <= 0.40, 0, 1) # If this is failing to run, check version of terra as updated versions throw an error at this line
 BTRW_pops$x <- crds(centroids(BTRW_pops))[,1]
 BTRW_pops$y <- crds(centroids(BTRW_pops))[,2]
 
 
 BTRW_pop_noncons <- BTRW_pops[BTRW_pops$connected ==0, ]
-dim(BTRW_pop_noncons) # 49 of 115 populations are considered to not be well connected.
+dim(BTRW_pop_noncons) # 59 of 115 populations are considered to not be well connected.
 
 # 5.2 Find nearest high connectivity population ----
 # Folllowing https://gis.stackexchange.com/questions/437968/r-finding-closest-point-to-each-point-and-filtering-which-points-to-consider
@@ -228,7 +235,8 @@ plot(BTRW_cor_dest, add = T, col = 'blue')
 
 # 5.3.2 Create conductance matrix  ----
 # According to the following Stack Overflow post which the Joseph Lewis (leastcostpath package creator) answered, create_cs() actually expects conductance values with higher values being more conductive/less costly so inversion of cumulative current is not required prior to create cost surface for least cost path creation https://stackoverflow.com/questions/77975556/incoherent-least-cost-path
-hsm_matrix <- create_cs(x = HSM_cur)
+hsm_matrix <- create_cs(x = HSM_cur <- rast('./03_Results/Resistance_surfaces/Habitat_suitability/Habitat_suitability_output_cum_curmap.asc') %>% 
+                          mask(Aus))
 plot(hsm_matrix)
 
 # 5.3.4 Create least cost path ----
@@ -391,7 +399,7 @@ p_dom_con <-ggplot()+
   labs(title = "(b)")
 p_dom_con
 
-plot_grid(p_con, p_dom_con, nrow = 2) # Rescale due to legend of first plot making first plot smaller than second
+plot_grid(p_con, p_dom_con, nrow = 2) 
 ggsave("./03_Results/Plots/Connectivity_creation.png", width = 20, height = 32, dpi = 300, units = 'cm')
 
 
@@ -466,15 +474,15 @@ unique(BTRW_fire_reg_full$status)
 
 
 
-pal1 <-  c("#92C5DE", "lightgray", "#F4A582", "#D6604D")
+pal1 <-  c("#92C5DE", "lightgray", "#F4A582", "#E58267", "#D6604D")
 BTRW_fire_reg_full <- BTRW_fire_reg_full %>% 
   arrange(status) 
 freq_stat <- 
   ggplot() +
   geom_spatvector(data = Aus, fill = "transparent") +
   geom_spatvector(data = BTRW_fire_reg_full, aes(fill = status, col = status))+
-  scale_fill_continuous(palette = pal1, breaks = c(1, 2, 3, 4),  labels = c("Lower", "Within", "", "Higher"))+
-  scale_color_continuous(palette = pal1, breaks = c(1, 2, 3, 4), labels = c("Lower", "Within", "", "Higher"))+
+  scale_fill_continuous(palette = pal1, breaks = c(1, 2, 3, 4, 5),  labels = c("Lower", "Within", "", "", "Higher"), limits = c(1,5))+
+  scale_color_continuous(palette = pal1, breaks = c(1, 2, 3, 4, 5), labels = c("Lower", "Within", "", "", "Higher"), limits = c(1,5))+
   theme_bw()+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
@@ -482,16 +490,11 @@ freq_stat <-
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
         legend.text = element_text(size = 12),
-        plot.background = element_blank(),
-        legend.position = "bottom",           # Add this
-        legend.direction = "horizontal")+     # Add this
+        plot.background = element_blank())+
   geom_spatvector(data = BTRW_pops, fill = NA, col = "black", size = 1, aes(alpha = 1), linewidth = 0.1) +
-  labs(fill = "Fire regime \nstatus", col = "Fire regime \nstatus", title = "(b)", alpha = "") +
+  labs(fill = "Fire frequency \nstatus", col = "Fire frequency \nstatus", title = "(b)", alpha = "") +
   scale_alpha_continuous(labels = "BTRW population") +
-  theme_cowplot(font_size = 17) +
-  theme(legend.position = "bottom",          # Repeat here to override cowplot theme
-        legend.direction = "horizontal") +
-  guides(fill = guide_colorbar(barwidth = 10, barheight = 1))
+  theme_cowplot(font_size = 17) 
 freq_stat
 
 fire_freq_r <- round(fire_freq)
@@ -508,9 +511,7 @@ fire_hist <- ggplot()+
         legend.title = element_text(face = 'bold', size = 14),
         legend.text = element_text(size = 12),
         plot.background = element_blank())+
-  theme_cowplot(font_size = 17) +
-  theme(legend.position = "bottom",
-        legend.direction = "horizontal")
+  theme_cowplot(font_size = 17)
 
 
 
@@ -528,10 +529,10 @@ BTRW_freq_full <- BTRW_fire_reg_full %>%
 BTRW_status <- tidyterra::count(BTRW_freq_full, status)
 BTRW_stat_total <- sum(BTRW_status$n[3:4])
 
-(BTRW_status$n[3]/BTRW_stat_total)*100 # 85% of population areas under higher than recommended fire frequencies exposed to 
+(BTRW_status$n[3]/BTRW_stat_total)*100 # 72% of population areas under higher than recommended fire frequencies exposed to 
 
 # Calculate proportion of areas of populations that have burnt twice in 36 years
-(BTRW_status$n[4]/BTRW_stat_total)*100 # 15% 
+(BTRW_status$n[4]/BTRW_stat_total)*100 # 28% 
 
 
 
@@ -574,10 +575,6 @@ BTRW_con_reg$status <- ifelse(BTRW_con_reg$frequency_status == "Higher" & round(
 BTRW_con_reg$status <- ifelse(BTRW_con_reg$frequency_status == "Higher" & round(BTRW_con_reg$Fire_frequency) >=3, 5, BTRW_con_reg$status)
 unique(BTRW_con_reg$status)
 
-# Find intermediate colour for reds
-colorRampPalette(c("#F4A582", "#D6604D"))(3)
-
-pal2 <-  c("#92C5DE", "lightgray", "#F4A582", "#E58267", "#D6604D")
 
 BTRW_con_reg <- BTRW_con_reg %>% 
   arrange(status) 
@@ -585,8 +582,8 @@ BTRW_con_reg <- BTRW_con_reg %>%
 cor_freq <- ggplot() +
   geom_spatvector(data = Aus, fill = "transparent") +
   geom_spatvector(data = BTRW_con_reg, aes(fill = status, col = status))+
-  scale_fill_continuous(palette = pal2, breaks = c(1, 2, 3, 4, 5),  labels = c("Lower", "Within", "", "", "Higher"))+
-  scale_color_continuous(palette = pal2, breaks = c(1, 2, 3, 4, 5), labels = c("Lower", "Within", "", "", "Higher"))+
+  scale_fill_continuous(palette = pal1, breaks = c(1, 2, 3, 4, 5),  labels = c("Lower", "Within", "", "", "Higher"))+
+  scale_color_continuous(palette = pal1, breaks = c(1, 2, 3, 4, 5), labels = c("Lower", "Within", "", "", "Higher"))+
   theme_bw()+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
@@ -596,26 +593,26 @@ cor_freq <- ggplot() +
         legend.text = element_text(size = 12),
         plot.background = element_blank())+
   geom_spatvector(data = BTRW_pops, fill = NA, col = "black", size = 1, aes(alpha = 1), linewidth = 0.1) +
-  labs(fill = "Fire regime \nstatus", col = "Fire regime \nstatus", title = "(c)", alpha = "") +
+  labs(fill = "Fire frequency \nstatus", col = "Fire frequency \nstatus", title = "(c)", alpha = "") +
   scale_alpha_continuous(labels = "BTRW population") +
-  theme_cowplot(font_size = 17) +
-  theme(legend.position = "bottom",
-        legend.direction = "horizontal") +
-  guides(fill = guide_colorbar(barwidth = 15, barheight = 1))
+  theme_cowplot(font_size = 17)
 cor_freq
 
-plot_grid(fire_hist, freq_stat, cor_freq, ncol = 1)
+
+fire_leg <- get_legend(cor_freq + theme(legend.direction = 'horizontal', legend.position = 'bottom', legend.key.width = unit(2, 'cm'), legend.spacing.x = unit(0.5, 'cm')))
+hist_leg <- get_legend(fire_hist)
+
+top_p <- plot_grid(fire_hist+ theme(legend.position = 'none'), hist_leg, ncol = 2, rel_widths = c(1, 1))
+bottom_p <- plot_grid(freq_stat + theme(legend.position = 'none'), cor_freq + theme(legend.position = 'none'))
+plot_grid(top_p, bottom_p, fire_leg, nrow = 3, rel_heights = c(1,1,0.15))
+
 ggsave("./03_Results/Plots/Fire_regime_management.png", width = 28, height = 48, dpi = 300, units = 'cm')
 
 # Dominant fire frequency for corridors 
 BTRW_cor_fire <- as.data.frame.matrix(table(BTRW_con_reg$pop_id, BTRW_con_reg$frequency_status))
-dom_fire <- as.data.frame(max.col(BTRW_cor_fire))
-dom_fire[dom_fire == 1, ] <- "Higher" 
-dom_fire[dom_fire == 2, ] <- "Lower"
-dom_fire[dom_fire == 3,] <- "Within"
-dom_fire$pop_id <- rownames(BTRW_cor_fire)
-dom_fire
-table(dom_fire)
+labels <- c("1" = "Higher", "2" = "Lower", "3" = "Within")
+labels[as.character(max.col(BTRW_cor_fire))] %>%  table()
+
 
 
 
@@ -623,9 +620,9 @@ table(dom_fire)
 BTRW_con_status <- tidyterra::count(BTRW_con_reg, status)
 BTRW_con_stat_total <- sum(BTRW_con_status$n[3:5])
 
-(BTRW_con_status$n[3]/BTRW_con_stat_total)*100 # 44% of population areas under higher than recommended fire frequencies exposed to 
-(BTRW_con_status$n[4]/BTRW_con_stat_total)*100 # 43% 
-(BTRW_con_status$n[5]/BTRW_con_stat_total)*100 # 13% 
+(BTRW_con_status$n[3]/BTRW_con_stat_total)*100 # 49% of population areas under higher than recommended fire frequencies exposed to 
+(BTRW_con_status$n[4]/BTRW_con_stat_total)*100 # 39% 
+(BTRW_con_status$n[5]/BTRW_con_stat_total)*100 # 12% 
 
 BTRW_FVG_con <- as.data.frame(BTRW_con_reg)
 BTRW_FVG_con <- BTRW_FVG_con[!duplicated(paste(BTRW_FVG_con$pop_id, BTRW_FVG_con$FVG, BTRW_FVG_con$frequency_status)), ]
@@ -634,6 +631,27 @@ BTRW_FVG_con <- BTRW_FVG_con[!duplicated(paste(BTRW_FVG_con$pop_id, BTRW_FVG_con
 table(BTRW_FVG_con$FVG, BTRW_FVG_con$frequency_status) # Mostly due to fire sensitive vegetation being burnt at higher fire frequencies than recommended.
 table(BTRW_FVG_pop$FVG, BTRW_FVG_pop$FREQUENCY)
 
+
+
+# Check how many connectivity buffers had data
+ggplot() +
+  geom_spatvector(data = Aus, fill = "transparent") +
+  geom_spatvector(data = BTRW_con_reg, aes(fill = status, col = status))+
+  geom_spatvector(data = BTRW_connectivity_buf3, fill = NA, col = "blue", linewidth = 0.1) + 
+  scale_fill_continuous(palette = pal1, breaks = c(1, 2, 3, 4, 5),  labels = c("Lower", "Within", "", "", "Higher"))+
+  scale_color_continuous(palette = pal1, breaks = c(1, 2, 3, 4, 5), labels = c("Lower", "Within", "", "", "Higher"))+
+  theme_bw()+
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme(legend.key.height = unit(1, 'cm'),
+        legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(face = 'bold', size = 14),
+        legend.text = element_text(size = 12),
+        plot.background = element_blank())+
+  geom_spatvector(data = BTRW_pops, fill = NA, col = "black", size = 1, aes(alpha = 1), linewidth = 0.1) +
+  labs(fill = "Fire frequency \nstatus", col = "Fire frequency \nstatus", title = "(c)", alpha = "") +
+  scale_alpha_continuous(labels = "BTRW population") +
+  theme_cowplot(font_size = 17)
 
 # 7. Sites for revegetation -----
 # Does the site have remnant vegetation cover
@@ -726,7 +744,7 @@ BVG_reveg_con # No naturally bare surfaces
 
 
 # For each population buffer
-#Rem_veg_pop <- extract(BVG, BTRW_pop_buf) # Takes a while to run so hashed to avoid accidentally running when not needed
+Rem_veg_pop <- extract(BVG, BTRW_pop_buf)
 head(Rem_veg_pop); dim(Rem_veg_pop)
 Rem_veg_pop$dist <- BTRW_pop_buf$dist[Rem_veg_pop$ID] # Add distance information
 head(Rem_veg_pop); dim(Rem_veg_pop)
@@ -738,7 +756,7 @@ Rem_veg_pop$reveg <- ifelse(Rem_veg_pop$remnant == 0 & Rem_veg_pop$NDVI_reveg ==
 unique(Rem_veg_pop$reveg)
 
 # Get information for the connectivity corridors but use masked raster for plotting
-Rem_veg_con <- extract(BVG, BTRW_connectivity_buf)
+#Rem_veg_con <- extract(BVG, BTRW_connectivity_buf) # Takes a while to run so hashed to avoid accidentally running when not needed
 head(Rem_veg_con); dim(Rem_veg_con)
 Rem_veg_con$dist <- BTRW_connectivity_buf$dist[Rem_veg_con$ID]
 head(Rem_veg_con); dim(Rem_veg_con)
@@ -751,14 +769,14 @@ unique(Rem_veg_con$reveg)
 
 
 
-writeVector(Rem_veg_pop_full, './03_Reslts/BTRW_pop_rem_veg_full.gpkg')
-writeVector(Rem_veg_pop, './03_Results/BTRW_pop_rem_veg.gpkg')
-writeVector(Rem_veg_con, './03_Results/BTRW_corridor_veg.gpkg')
+write.csv(Rem_veg_pop_full, './03_Results/BTRW_pop_rem_veg_full.csv', col.names = T)
+write.csv(Rem_veg_pop, './03_Results/BTRW_pop_rem_veg.csv')
+write.csv(Rem_veg_con, './03_Results/BTRW_corridor_veg.csv')
 
 
 # Plot opportunities for revegetation
 brewer.pal(6, 'Greys')
-pal3 <- c("#CCCCCC", "#969696", "#636363", "#252525")
+pal2 <- c("#CCCCCC", "#969696", "#636363", "#252525")
 
 veg_pop <- 
   ggplot()+
@@ -776,7 +794,7 @@ veg_pop <-
         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
         legend.margin = margin(0, 1.2, 0, 0))+
     geom_spatraster(data = BVG_reveg_pop)+
-    scale_fill_continuous(palette = pal3, breaks = c(0,1,2,3,4), labels = c('Naturally bare', 'Remnant optimal NDVI', ' Remnant suboptimal NDVI', 'Non-remnant optimal NDVI', 'Non-remnant suboptimal NDVI'), name = 'Vegetation cover', na.value = 'transparent') +
+    scale_fill_continuous(palette = pal2, breaks = c(0,1,2,3,4), labels = c('Naturally bare', 'Remnant optimal NDVI', ' Remnant suboptimal NDVI', 'Non-remnant optimal NDVI', 'Non-remnant suboptimal NDVI'), name = 'Vegetation cover', na.value = 'transparent') +
   labs(title = "(a)", alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1)) +
   scale_alpha_continuous(labels = "BTRW population") 
@@ -798,7 +816,7 @@ veg_con <-
         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
         legend.margin = margin(0, 1.2, 0, 0))+
   geom_spatraster(data = BVG_reveg_con)+
-  scale_fill_continuous(palette = pal3, breaks = c(0,1,2,3,4), labels = c('Naturally bare', 'Remnant optimal NDVI', ' Remnant suboptimal NDVI', 'Non-remnant optimal NDVI', 'Non-remnant suboptimal NDVI'), name = 'Vegetation cover', na.value = 'transparent') +
+  scale_fill_continuous(palette = pal2, breaks = c(0,1,2,3,4), labels = c('Naturally bare', 'Remnant optimal NDVI', ' Remnant suboptimal NDVI', 'Non-remnant optimal NDVI', 'Non-remnant suboptimal NDVI'), name = 'Vegetation cover', na.value = 'transparent') +
   labs(title = "(b)", alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population") 
@@ -858,10 +876,10 @@ table(BTRW_con_veg$reveg, BTRW_con_veg$dist)
 
 BTRW_con_reveg <- count(BTRW_con_veg, reveg)
 BTRW_reveg_total <- sum(BTRW_con_reveg$n[1:4])
-(BTRW_con_reveg$n[1]/BTRW_reveg_total)*100 # 17%
-(BTRW_con_reveg$n[2]/BTRW_reveg_total)*100 #27
-(BTRW_con_reveg$n[3]/BTRW_reveg_total)*100 #55
-(BTRW_con_reveg$n[4]/BTRW_reveg_total)*100 #0.28
+(BTRW_con_reveg$n[1]/BTRW_reveg_total)*100 # 18%
+(BTRW_con_reveg$n[2]/BTRW_reveg_total)*100 #28
+(BTRW_con_reveg$n[3]/BTRW_reveg_total)*100 #54
+(BTRW_con_reveg$n[4]/BTRW_reveg_total)*100 #0.24
 
 
 
@@ -1335,7 +1353,7 @@ dog_df$species <- 'Canis familiaris'
 dog_rast <- rasterize(dog, rtemp, fun = 'count')
 dog_rast[is.na(dog_rast)] <-  0 # Replace NAs, do no trim
 
-# The following code is based on underlying code for the sampbias package. Functions from the sampbias were not able to be run so code for  calculate_bias() and project_bias() was modified to work for the data. Code was modified from the github code files at https://github.com/azizka/sampbias.git accessed on the 30th January 2026
+# The following code is based on underlying code for the sampbias package. Functions from the sampbias were not able to be run so code was copied from GitHub and modified to work for the data. Code was downloaded from https://github.com/azizka/sampbias.git on the 30th January 2026
 
 
 # Create gaz rasters 
@@ -1490,14 +1508,14 @@ lantana_sampbias <- sampbias::map_bias(
 
 # Create plot of bias considering all geo_features
 names(lantana_out)
-lantana_spatbias <- lantana_out[["small_buildings+roads+large_buildings+population_centres"]]
+lantana_spatbias <- lantana_out[["roads+small_buildings+large_buildings+population_centres"]]
 
 plo_lantana <-  data.frame(geo_lon = crds(lantana_spatbias)[, 1], geo_lat = crds(lantana_spatbias)[, 2], sampling_bias = values(lantana_spatbias)[, 1]) %>%
   filter(!is.na(sampling_bias))
 
 
 # Create plot
-Aus <- Aus[Aus$STATE_CODE == 3]
+Aus <- Aus[Aus$STE_CODE21 == 3]
 plo_lantana_rast <- terra::mask(rast(plo_lantana, crs = 'EPSG:3577'), Aus)
 plot(plo_lantana_rast)
 plo_lantana_masked <- as.data.frame(plo_lantana_rast, xy = T)
@@ -1529,7 +1547,7 @@ lantana_spatbias_p <- ggplot()+
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
-    limits = c(0, 0.25)
+    limits = c(0, 0.252)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -1657,7 +1675,7 @@ fox_sampbias <- sampbias::map_bias(
 
 # Create plot of bias considering all geo_features
 names(fox_out)
-fox_spatbias <- fox_out[["roads+large_buildings+small_buildings+population_centres"]]
+fox_spatbias <- fox_out[["roads+large_buildings+population_centres+small_buildings"]]
 
 plo_fox <-  data.frame(geo_lon = crds(fox_spatbias)[, 1], geo_lat = crds(fox_spatbias)[, 2], sampling_bias = values(fox_spatbias)[, 1]) %>%
   filter(!is.na(sampling_bias))
@@ -1694,8 +1712,8 @@ fox_spatbias_p <- ggplot()+
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
-    limits = c(0.005, 0.032),
-    breaks = c(0.005, 0.01, 0.015, 0.02, 0.025, 0.032)
+    limits = c(0.005, 0.029),
+    breaks = c(0.005, 0.01, 0.015, 0.02, 0.025, 0.029)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -1822,7 +1840,7 @@ cat_sampbias <- sampbias::map_bias(
 
 # Create plot of bias considering all geo_features
 names(cat_out)
-cat_spatbias <- cat_out[["large_buildings+roads+small_buildings+population_centres"]]
+cat_spatbias <- cat_out[["roads+large_buildings+population_centres+small_buildings"]]
 
 plo_cat <-  data.frame(geo_lon = crds(cat_spatbias)[, 1], geo_lat = crds(cat_spatbias)[, 2], sampling_bias = values(cat_spatbias)[, 1]) %>%
   filter(!is.na(sampling_bias))
@@ -1860,7 +1878,8 @@ cat_spatbias_p <- ggplot()+
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
-    limits = c(0.004, 0.0123)
+    limits = c(0.0090, 0.00935),
+    breaks = c(0.0090, 0.0091, 0.0092, 0.00935)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -2024,7 +2043,8 @@ dog_spatbias_p <- ggplot()+
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
-    limits = c(0.0103, 0.01060352)
+    limits = c(0.0102, 0.01043),
+    breaks = c(0.0102, 0.0103, 0.01043)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -2058,10 +2078,10 @@ BTRW_connectivity_buf$dog_spatbias <- dog_corrid$`roads+small_buildings+populati
 
 display.brewer.all()
 brewer.pal(9, 'Blues')
-pal4 <- c("#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#08519C", "#08306B")
+pal3 <- c("#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#08519C", "#08306B")
 
 brewer.pal(9, 'Greys')
-pal5 <- c("#D9D9D9", "#BDBDBD", "#969696", "#737373", "#525252", "#252525", "#000000")
+pal4 <- c("#D9D9D9", "#BDBDBD", "#969696", "#737373", "#525252", "#252525", "#000000")
 
 
 BTRW_pop_buf <- BTRW_pop_buf %>% 
@@ -2087,8 +2107,8 @@ lantana_pop <- ggplot()+
     legend.margin = margin(4, 0, 0, 0)
   )+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = lantana_count, col = lantana_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,90), breaks = c(1,20,40,60,80,90)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,90), breaks = c(1,20,40,60,80,90)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,20,40,60,70)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,20,40,60,70)) +
   labs(title = bold("(a) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2115,9 +2135,9 @@ lantana_corridor <- ggplot()+
     legend.margin = margin(4, 0, 0, 0)
   )+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = lantana_count, col = lantana_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, breaks = c(1,20,40,60,80,90), limits = c(1,90)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, breaks = c(1,20,40,60,80,90), limits = c(1,90)) +
-  labs(title = bold("(b) ")~italic(Lantana~camara), alpha = "")+
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,20,40,60,70), limits = c(1,70)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,20,40,60,70), limits = c(1,70)) +
+  labs(title = bold("(e) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 
@@ -2146,9 +2166,9 @@ cat_pop <-
     legend.margin = margin(4, 0, 0, 0)
   )+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = cat_count, col = cat_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,11), breaks = seq(1,11,1)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal4, limits = c(1,11), breaks = seq(1,11,1)) +
-  labs(title = bold("(d) ")~italic(Felis~catus), alpha = "")+
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
+  labs(title = bold("(b) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 cat_pop
@@ -2174,9 +2194,9 @@ cat_corridor <-
          legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
          legend.margin = margin(4, 0, 0, 0))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = cat_count, col = cat_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,11), breaks = seq(1,11,1)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal4, limits = c(1,11), breaks = seq(1,11,1)) +
-  labs(title = bold("(e) ")~italic(Felis~catus), alpha = "")+
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
+  labs(title = bold("(f) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 
@@ -2203,9 +2223,9 @@ fox_pop <-
          legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
          legend.margin = margin(4, 0, 0, 0))+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = fox_count, col = fox_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal4, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
-  labs(title = bold("(g) ")~italic(Vulpes~vulpes), alpha = "")+
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
+  labs(title = bold("(c) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 fox_pop
@@ -2230,9 +2250,9 @@ fox_corridor <-
         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
         legend.margin = margin(4, 0, 0, 0))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = fox_count, col = fox_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal4, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
-  labs(title = bold("(h) ")~italic(Vulpes~vulpes), alpha = "")+
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
+  labs(title = bold("(g) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 
@@ -2260,9 +2280,9 @@ dog_pop <-
          legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
          legend.margin = margin(4, 0, 0, 0))+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = dog_count, col = dog_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal4, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal4, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
-  labs(title = bold("(j) ")~italic(Canis~familiaris), alpha = "")+
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
+  labs(title = bold("(d) ")~italic(Canis~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 dog_pop
@@ -2289,16 +2309,16 @@ dog_corridor <-
         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
         legend.margin = margin(4, 0, 0, 0))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = dog_count, col = dog_count))+
-  scale_fill_continuous(name = "Number of records", palette = pal4, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
-  scale_colour_continuous(name = 'Number of records', palette = pal4, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
-  labs(title = bold("(k) ")~italic(Canis~familiaris), alpha = "")+
+  scale_fill_continuous(name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
+  scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
+  labs(title = bold("(h) ")~italic(Canis~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 
 
-lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(c) ")~italic(Lantana~camara))
-cat_spat_p <- cat_spatbias_p + labs(title = bold("(f) ")~italic(Felis~catus))
-fox_spat_p <- fox_spatbias_p + labs(title = bold("(i) ")~italic(Vulpes~vulpes))
+lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(i) ")~italic(Lantana~camara))
+cat_spat_p <- cat_spatbias_p + labs(title = bold("(j) ")~italic(Felis~catus))
+fox_spat_p <- fox_spatbias_p + labs(title = bold("(k) ")~italic(Vulpes~vulpes))
 dog_spat_p <- dog_spatbias_p + labs(title = bold("(l) ")~italic(Canis~familiaris))
 
 lantana_leg <- get_legend(lantana_pop)
@@ -2311,7 +2331,7 @@ samp_leg_cat <- get_legend(cat_spat_p)
 samp_leg_fox <- get_legend(fox_spat_p)
 samp_leg_dog <- get_legend(dog_spat_p)
 
-plot_grid(
+pest_plot <- plot_grid(
   lantana_pop + theme(legend.position = "none"),
   cat_pop + theme(legend.position = "none"),
   fox_pop + theme(legend.position = "none"),
@@ -2332,39 +2352,13 @@ plot_grid(
   rel_heights = c(1, 1, 0.15, 1, 0.15)
 )
 
-ggsave("./03_Results/Plots/Pest_management.png", width = 62, height = 62, dpi = 300, units = 'cm')
-
-
-lantana_p <- plot_grid(lantana_pop + theme(legend.position = "none"), lantana_corridor, lantana_spat_p, ncol = 3, rel_widths = c(0.5,0.5,0.5), align = "h")
-lantana_p
-#ggsave("./03_Results/Plots/Pest_management/Lantana_management.png", lantana_p, width = 32, height = 15, dpi = 300, units = 'cm')
-
-
-cat_p <- plot_grid(cat_pop+ theme(legend.position = "none"), cat_corridor, cat_spat_p, ncol = 3, rel_widths = c(0.5,0.5,0.5), align = "h")
-cat_p
-#ggsave("./03_Results/Plots/Pest_management/Cat_management.png", cat_p, width = 32, height = 15, dpi = 300, units = 'cm')
-
-
-fox_p <- plot_grid(fox_pop+ theme(legend.position = "none"), fox_corridor, fox_spat_p, ncol = 3, rel_widths = c(0.5,0.5,0.5), align = "h")
-fox_p
-#ggsave("./03_Results/Plots/Pest_management/Fox_management.png", fox_p, width = 32, height = 15, dpi = 300, units = 'cm')
-
-
-dog_p <- plot_grid(dog_pop+ theme(legend.position = "none"), dog_corridor, dog_spat_p, ncol = 3, rel_widths = c(0.5,0.5,0.5), align = "h")
-dog_p
-#ggsave("./03_Results/Plots/Pest_management/Dog_management.png", dog_p, width = 32, height = 15, dpi = 300, units = 'cm')
+pest_plot + theme(plot.margin = unit(c(0.5, 0.5, 0.5, 1), "cm"))
+ggsave("./03_Results/Plots/Pest_management.png", width = 66, height = 63, dpi = 300, units = 'cm')
 
 
 
 
-plot_grid(lantana_p, cat_p, fox_p, dog_p, ncol = 1)
-ggsave("./03_Results/Plots/Pest_management.png", width = 60, height = 62, dpi = 300, units = 'cm')
-
-# Overall pest prevalence across all populations
-# Overall pest prevalence across all populations
-# Overall pest prevalence across all populations
-# Overall pest prevalence across all populations
-# Overall pest prevalence across all populations
+# Overall pest prevalence across populations
 pest_prevalence <- BTRW_pop_buf %>% 
   distinct(pop_id, .keep_all = TRUE) %>%
   summarise(
@@ -2388,7 +2382,7 @@ pest_prevalence <- BTRW_pop_buf %>%
   )
 as.list(pest_prevalence)
 
-
+# Overall pest prevalance across connectivity paths
 pest_cor_prevalence <- BTRW_connectivity_buf %>% 
   distinct(pop_id, .keep_all = TRUE) %>%
   summarise(
@@ -2412,6 +2406,14 @@ pest_cor_prevalence <- BTRW_connectivity_buf %>%
   )
 as.list(pest_cor_prevalence)
 
+# Determine which populations are predator free
+predator_free <- BTRW_pop_buf[BTRW_pop_buf$dist == "2-3km" &
+                                is.na(BTRW_pop_buf$lantana_count) & 
+                                is.na(BTRW_pop_buf$cat_count) & 
+                                is.na(BTRW_pop_buf$fox_count) & 
+                                is.na(BTRW_pop_buf$dog_count), ]
+
+nrow(predator_free)
 
 
 writeVector(BTRW_pop_buf, './03_Results/BTRW_population_buffer_information.gpkg', overwrite = T)

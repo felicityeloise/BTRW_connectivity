@@ -34,7 +34,7 @@ BTRW_pres$year <- ifelse(nchar(BTRW_pres$Date_start) == 4, as.numeric(BTRW_pres$
 dim(BTRW_pres); head(BTRW_pres)
 
 
-Aus <- vect('./00_Data/Australia_shapefile/STE11aAust.shp') %>% 
+Aus <- vect('./00_Data/Australia_shapefile/STE_2021_AUST_GDA2020.shp') %>% 
   project("EPSG:3577")
 QN <- Aus[Aus$STATE_NAME == "Queensland" | Aus$STATE_NAME == "New South Wales"]
 
@@ -108,6 +108,8 @@ brewer.pal(9, "Blues")
 pal <- c("#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#08519C", "#08306B")
 
 
+
+
 # With roads
 ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
@@ -144,7 +146,7 @@ ggplot()+
         plot.background = element_blank())+
   theme_cowplot(font_size = 17) +
   geom_spatvector(data = landuse_poly, aes(fill = SIMP), col = NA) +
-  scale_fill_manual(values = c("#CCCCCC", "#969696", "#636363"), labels = c("Residential", "Agricultural and \nother intensive use", "Conservation and \nminimal use"), name = "Land use") +
+  scale_fill_manual(values = c("Residential land" = "#F0F0F0", "Agricultural or intensive use land" = "#969696", "Conservation area" = "#252525"),  labels = c("Residential", "Conservation and \nminimal use", "Agricultural and \nother intensive use"), name = "Land use") +
   new_scale_fill()+
   geom_spatraster(data = BVG, aes(fill = remnant), alpha = 0.4) +
   scale_fill_manual(values = c("1" = "#BAE4B3"), na.value = "transparent", na.translate = FALSE, name = 'Remnant vegetation', labels = NULL) + # NA.translate makes sure NAs are not added to the legend

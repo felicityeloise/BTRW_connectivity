@@ -44,10 +44,10 @@ BTRW_pres$year <- ifelse(nchar(BTRW_pres$Date_start) == 4, as.numeric(BTRW_pres$
 
 dim(BTRW_pres); head(BTRW_pres)
 
-Aus <- vect('./00_Data/Australia_shapefile/STE11aAust.shp') %>% 
+Aus <- vect('./00_Data/Australia_shapefile/STE_2021_AUST_GDA2020.shp') %>% 
   project("EPSG:3577")
 
-QN <- Aus[Aus$STATE_NAME == "Queensland" | Aus$STATE_NAME == "New South Wales"]
+QN <- Aus[Aus$STE_NAME21 == "Queensland" | Aus$STE_NAME21 == "New South Wales"]
 
 
 BTRW_hsm_r <- rast('./00_Data/Environmental_data/Outputs/BTRW_HSM/BTRW_HSM_test.asc')
@@ -89,8 +89,7 @@ buildings <- rast('./00_Data/Environmental_data/Outputs/Buildings/aoi_building_a
 names(buildings) <-  'Buildings'
 roads <- rast('./00_Data/Environmental_data/Outputs/Roads/aoi_roads_reproj_cropped_test.asc')
 names(roads) <- "Roads"
-rail <- rast('./00_Data/Environmental_data/Outputs/Railways/aoi_railway_aggregated_reproj_cropped_test.asc')
-names(rail) <- "Railways"
+
 
 # Create presence point only information
 # Need to convert data from lon/lat to meter based
@@ -268,9 +267,15 @@ plot(HSM_cur)
 plot(BTRW_cds, add = T)
 plot(HSM_cur <100)
 plot(BTRW_cds, add = T)
+unique(round(values(HSM_cur)))
 
-# Re-assign values over 100 as 100 to show 100% connectivity
-HSM_cur <- ifel(HSM_cur >100, 100, HSM_cur)
+
+# Re-scale values between 0 and 1 but clamp at 99th percentile to reduce squishing all values to 0
+HSM_q99 <- global(HSM_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+HSM_win <- clamp(HSM_cur, upper = HSM_q99, values = T)
+mn_HSM <- global(HSM_win, "min", na.rm = T)[[1]]
+mx_HSM <- global(HSM_win, "max", na.rm = T)[[1]]
+HSM_cur <- (HSM_win - mn_HSM)/ (mx_HSM - mn_HSM)
 HSM_cur; plet(HSM_cur)
 
 
@@ -283,74 +288,122 @@ plot(BTRW_cds, add = T)
 # Where we have really high cumulative current values and more connectivity we have larger clusters of BTRW occurrences so these areas are really well connected.
 summary(NDVI_cur)
 
-# Re-assign values over 100 as 100 to show 100% connectivity
-NDVI_cur <- ifel(NDVI_cur >100, 100, NDVI_cur)
+NDVI_q99 <- global(NDVI_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+NDVI_win <- clamp(NDVI_cur, upper = NDVI_q99, values = T)
+mn_NDVI <- global(NDVI_win, "min", na.rm = T)[[1]]
+mx_NDVI <- global(NDVI_win, "max", na.rm = T)[[1]]
+NDVI_cur <- (NDVI_win - mn_NDVI)/ (mx_NDVI - mn_NDVI)
 NDVI_cur; plet(NDVI_cur)
-
 
 mintemp_cur <- rast('./03_Results/Resistance_surfaces/Min_temp/Min_temp_output_cum_curmap.asc') %>% 
   mask(QN)
 plot(mintemp_cur); summary(mintemp_cur$Min_temp_output_cum_curmap)
-mintemp_cur <- ifel(mintemp_cur >100, 100, mintemp_cur)
+mintemp_q99 <- global(mintemp_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+mintemp_win <- clamp(mintemp_cur, upper = mintemp_q99, values = T)
+mn_mintemp <- global(mintemp_win, "min", na.rm = T)[[1]]
+mx_mintemp <- global(mintemp_win, "max", na.rm = T)[[1]]
+mintemp_cur <- (mintemp_win - mn_mintemp)/ (mx_mintemp - mn_mintemp)
 mintemp_cur; plet(mintemp_cur)
 
 
 aspect_cur <- rast('./03_Results/Resistance_surfaces/Aspect/Aspect_output_cum_curmap.asc') %>% 
   mask(QN)
 summary(aspect_cur); plot(aspect_cur)
-aspect_cur <- ifel(aspect_cur >100, 100, aspect_cur)
+aspect_q99 <- global(aspect_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+aspect_win <- clamp(aspect_cur, upper = aspect_q99, values = T)
+mn_aspect <- global(aspect_win, "min", na.rm = T)[[1]]
+mx_aspect <- global(aspect_win, "max", na.rm = T)[[1]]
+aspect_cur <- (aspect_win - mn_aspect)/ (mx_aspect - mn_aspect)
 aspect_cur; plet(aspect_cur)
 
 
 landuse_cur <- rast('./03_Results/Resistance_surfaces/Land/Land_output_cum_curmap.asc') %>% 
   mask(QN)
 plot(landuse_cur); summary(landuse_cur)
-landuse_cur <- ifel(landuse_cur >100, 100, landuse_cur)
+landuse_q99 <- global(landuse_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+landuse_win <- clamp(landuse_cur, upper = landuse_q99, values = T)
+mn_landuse <- global(landuse_win, "min", na.rm = T)[[1]]
+mx_landuse <- global(landuse_win, "max", na.rm = T)[[1]]
+landuse_cur <- (landuse_win - mn_landuse)/ (mx_landuse - mn_landuse)
 landuse_cur; plet(landuse_cur)
 
 rainfall_cur <- rast('./03_Results/Resistance_surfaces/Rainfall/Rainfall_output_cum_curmap.asc') %>% 
   mask(QN)
-plot(rainfall_cur); summary(rainfall_cur)
-rainfall_cur <- ifel(rainfall_cur >100, 100, rainfall_cur)
+rainfall_q99 <- global(rainfall_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+rainfall_win <- clamp(rainfall_cur, upper = rainfall_q99, values = T)
+mn_rainfall <- global(rainfall_win, "min", na.rm = T)[[1]]
+mx_rainfall <- global(rainfall_win, "max", na.rm = T)[[1]]
+rainfall_cur <- (rainfall_win - mn_rainfall)/ (mx_rainfall - mn_rainfall)
 rainfall_cur; plet(rainfall_cur)
+
 
 building_cur <- rast('./03_Results/Resistance_surfaces/Buildings/Buildings_output_cum_curmap.asc') %>% 
   mask(QN)
 plot(building_cur); summary(building_cur)
-building_cur <- ifel(building_cur >100, 100, building_cur)
-plot(building_cur)
+building_q99 <- global(building_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+building_win <- clamp(building_cur, upper = building_q99, values = T)
+mn_building <- global(building_win, "min", na.rm = T)[[1]]
+mx_building <- global(building_win, "max", na.rm = T)[[1]]
+building_cur <- (building_win - mn_building)/ (mx_building - mn_building)
+building_cur; plet(building_cur)
+
+
 
 NVIS_cur <- rast('./03_Results/Resistance_surfaces/NVIS/NVIS_output_cum_curmap.asc') %>% 
   mask(QN)
 plot(NVIS_cur); summary(NVIS_cur)
-NVIS_cur <- ifel(NVIS_cur >100, 100, NVIS_cur)
-plot(NVIS_cur)
+NVIS_q99 <- global(NVIS_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+NVIS_win <- clamp(NVIS_cur, upper = NVIS_q99, values = T)
+mn_NVIS <- global(NVIS_win, "min", na.rm = T)[[1]]
+mx_NVIS <- global(NVIS_win, "max", na.rm = T)[[1]]
+NVIS_cur <- (NVIS_win - mn_NVIS)/ (mx_NVIS - mn_NVIS)
+NVIS_cur; plet(NVIS_cur)
 
 Rain_drought_cur <- rast('./03_Results/Resistance_surfaces/Rainfall_90_10/Rainfall_90_10_output_cum_curmap.asc') %>% 
   mask(QN)
-Rain_drought_cur <- ifel(Rain_drought_cur >100, 100, Rain_drought_cur)
-plot(Rain_drought_cur)
+Rain_drought_q99 <- global(Rain_drought_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+Rain_drought_win <- clamp(Rain_drought_cur, upper = Rain_drought_q99, values = T)
+mn_Rain_drought <- global(Rain_drought_win, "min", na.rm = T)[[1]]
+mx_Rain_drought <- global(Rain_drought_win, "max", na.rm = T)[[1]]
+Rain_drought_cur <- (Rain_drought_win - mn_Rain_drought)/ (mx_Rain_drought - mn_Rain_drought)
+Rain_drought_cur; plet(Rain_drought_cur)
 
 Rain_flood_cur <- rast('./03_Results/Resistance_surfaces/Rainfall_11_24/Rainfall_11_24_output_cum_curmap.asc') %>% 
   mask(QN)
-Rain_flood_cur <- ifel(Rain_flood_cur >100, 100, Rain_flood_cur)
-plot(Rain_flood_cur)
+Rain_flood_q99 <- global(Rain_flood_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+Rain_flood_win <- clamp(Rain_flood_cur, upper = Rain_flood_q99, values = T)
+mn_Rain_flood <- global(Rain_flood_win, "min", na.rm = T)[[1]]
+mx_Rain_flood <- global(Rain_flood_win, "max", na.rm = T)[[1]]
+Rain_flood_cur <- (Rain_flood_win - mn_Rain_flood)/ (mx_Rain_flood - mn_Rain_flood)
+Rain_flood_cur; plet(Rain_flood_cur)
+
 
 Rugged_cur <- rast('./03_Results/Resistance_surfaces/Ruggedness/Ruggedness_output_cum_curmap.asc') %>% 
   mask(QN)
-Rugged_cur <- ifel(Rugged_cur >100, 100, Rugged_cur)
-plot(Rugged_cur)
-
+Rugged_q99 <- global(Rugged_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+Rugged_win <- clamp(Rugged_cur, upper = Rugged_q99, values = T)
+mn_Rugged <- global(Rugged_win, "min", na.rm = T)[[1]]
+mx_Rugged <- global(Rugged_win, "max", na.rm = T)[[1]]
+Rugged_cur <- (Rugged_win - mn_Rugged)/ (mx_Rugged - mn_Rugged)
+Rugged_cur; plet(Rugged_cur)
 
 roads_cur <- rast('./03_Results/Resistance_surfaces/Roads/Road_output_cum_curmap.asc') %>% 
   mask(QN)
-roads_cur <- ifel(roads_cur >100, 100, roads_cur)
-plot(roads_cur)
+roads_q99 <- global(roads_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+roads_win <- clamp(roads_cur, upper = roads_q99, values = T)
+mn_roads <- global(roads_win, "min", na.rm = T)[[1]]
+mx_roads <- global(roads_win, "max", na.rm = T)[[1]]
+roads_cur <- (roads_win - mn_roads)/ (mx_roads - mn_roads)
+roads_cur; plet(roads_cur)
 
 elevation_cur <- rast('./03_Results/Resistance_surfaces/Elevation/Elevation_output_cum_curmap.asc') %>% 
   mask(QN)
-elevation_cur <- ifel(elevation_cur >100, 100, elevation_cur)
-plot(elevation_cur)
+elevation_q99 <- global(elevation_cur, quantile, probs = 0.99, na.rm = T)[[1]]
+elevation_win <- clamp(elevation_cur, upper = elevation_q99, values = T)
+mn_elevation <- global(elevation_win, "min", na.rm = T)[[1]]
+mx_elevation <- global(elevation_win, "max", na.rm = T)[[1]]
+elevation_cur <- (elevation_win - mn_elevation)/ (mx_elevation - mn_elevation)
+elevation_cur; plet(elevation_cur)
 
 
 # 6. Rank connectivity maps ----
@@ -363,41 +416,41 @@ plot(rand_pts); dim(rand_pts)
 HSM_pts <- extract(HSM_cur, rand_pts)
 
 NDVI_pts <- extract(NDVI_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, NDVI_pts$NDVI_output_cum_curmap) # 0.8837224
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, NDVI_pts$NDVI_output_cum_curmap) # 0.893175
 
 mintm_pts <- extract(mintemp_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, mintm_pts$Min_temp_output_cum_curmap) # 0.8443371
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, mintm_pts$Min_temp_output_cum_curmap) #0.863091 
 
 
 rain_pts <- extract(rainfall_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rain_pts$Rainfall_output_cum_curmap) # 0.8619866
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rain_pts$Rainfall_output_cum_curmap) # 0.8763495  
 
 aspect_pts <- extract(aspect_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, aspect_pts$Aspect_output_cum_curmap) # 0.76028
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, aspect_pts$Aspect_output_cum_curmap) # 0.7606478 
 
 land_pts <- extract(landuse_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, land_pts$Land_output_cum_curmap) # 0.6432878
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, land_pts$Land_output_cum_curmap) # 0.6461404 
 
 nvis_pts <- extract(NVIS_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, nvis_pts$NVIS_output_cum_curmap) # 0.4691133
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, nvis_pts$NVIS_output_cum_curmap) # 0.4691301 
 
 rain_drought_pts <- extract(Rain_drought_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rain_drought_pts$Rainfall_90_10_output_cum_curmap) # 0.8630988
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rain_drought_pts$Rainfall_90_10_output_cum_curmap) # 0.8771527 
 
 rain_flood_pts <- extract(Rain_flood_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rain_flood_pts$Rainfall_11_24_output_cum_curmap) # 0.85599277
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rain_flood_pts$Rainfall_11_24_output_cum_curmap) # 0.8747641 
 
 rugged_pts <- extract(Rugged_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rugged_pts$Ruggedness_output_cum_curmap) # 0.7952246
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, rugged_pts$Ruggedness_output_cum_curmap) # 0.7541352
 
 build_pts <- extract(building_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, build_pts$Buildings_output_cum_curmap) # 0.5463696
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, build_pts$Buildings_output_cum_curmap) # 0.5164414
 
 roads_pts <- extract(roads_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, roads_pts$Road_output_cum_curmap) # 0.455055
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, roads_pts$Road_output_cum_curmap) # 0.4445565
 
 elevation_pts <- extract(elevation_cur, rand_pts)
-cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, elevation_pts$Elevation_output_cum_curmap) # 0.7003844
+cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, elevation_pts$Elevation_output_cum_curmap) # 0.7136694 
 
 
 
@@ -405,7 +458,7 @@ cor.test(HSM_pts$Habitat_suitability_output_cum_curmap, elevation_pts$Elevation_
 
 HSM_m <- ggplot()+
   geom_spatraster(data = HSM_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(a) Habitat suitability", subtitle = "") +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
@@ -418,15 +471,15 @@ HSM_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off') +
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 
 NDVI_m <-ggplot()+
   geom_spatraster(data = NDVI_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(b) NDVI", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.883"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(b) NDVI", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.893"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -438,14 +491,14 @@ NDVI_m <-ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off') +
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 rain_drought_m <- ggplot()+
   geom_spatraster(data = Rain_drought_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(c) Rainfall 1990-2010", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.863"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(c) Rainfall 1990-2010", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.877"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -457,15 +510,15 @@ rain_drought_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 
 rainfall_m <- ggplot()+
   geom_spatraster(data = rainfall_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(d) Rainfall", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.861"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(d) Rainfall", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.876"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -477,15 +530,15 @@ rainfall_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 
 rain_flood_m <- ggplot()+
   geom_spatraster(data = Rain_flood_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(e) Rainfall 2011-2024", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.855"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(e) Rainfall 2011-2024", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.874"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -497,15 +550,15 @@ rain_flood_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 
 mintemp_m <- ggplot()+
   geom_spatraster(data = mintemp_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(f) Minimum temperature", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.844"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(f) Minimum temperature", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.863"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -518,15 +571,35 @@ mintemp_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
+
+
+aspect_m <- ggplot()+
+  geom_spatraster(data = aspect_cur) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(g) Aspect", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.760"))) +
+  annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme(legend.key.height = unit(1, 'cm'),
+        legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(face = 'bold', size = 25),
+        legend.text = element_text(size = 20),
+        plot.background = element_blank(),
+        plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
+  coord_sf(clip = 'off')+
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
+  labs(x = "", y = "")
+
 
 
 
 rugged_m <- ggplot()+
   geom_spatraster(data = Rugged_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(g) Ruggedness", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.795"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(h) Ruggedness", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.754"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -538,36 +611,15 @@ rugged_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
-  labs(x = "", y = "")
-
-
-
-
-aspect_m <- ggplot()+
-  geom_spatraster(data = aspect_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(h) Aspect", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.760"))) +
-  annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme(legend.key.height = unit(1, 'cm'),
-        legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
-        plot.background = element_blank(),
-        plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
-  coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 
 elevation_m <- ggplot()+
   geom_spatraster(data = aspect_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(i) Elevation", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.700"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(i) Elevation", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.713"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -579,15 +631,14 @@ elevation_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
-
 
 
 landuse_m <- ggplot()+
   geom_spatraster(data = landuse_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(j) Landuse", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.643"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(j) Landuse", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.646"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -599,15 +650,16 @@ landuse_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
+
 
 
 
 build_m <- ggplot()+
   geom_spatraster(data = building_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(k) Buildings", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.546"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(k) Buildings", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.516"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -619,13 +671,13 @@ build_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 NVIS_m <- ggplot()+
   geom_spatraster(data = NVIS_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(l) Broad vegetation group", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.469"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
@@ -638,15 +690,15 @@ NVIS_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
 
 road_m <- ggplot()+
   geom_spatraster(data = roads_cur) +
-  scale_fill_viridis_c(na.value = 'transparent') +
-  labs(fill = "Connectivity", title = "(m) Roads", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.455"))) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
+  labs(fill = "Connectivity", title = "(m) Roads", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.444"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -658,7 +710,7 @@ road_m <- ggplot()+
   theme_bw() +
   theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
-  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1) +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
 
 
@@ -666,8 +718,8 @@ road_m <- ggplot()+
 
 cur_legend <- get_legend(rain_flood_m)
 cur_maps <- plot_grid(HSM_m + theme(legend.position = 'none'), NDVI_m + theme(legend.position = "none"), rain_drought_m + theme(legend.position = 'none'), rainfall_m + theme(legend.position = 'none'), rain_flood_m + theme(legend.position = 'none'), cur_legend,
-                        mintemp_m + theme(legend.position = 'none'), rugged_m + theme(legend.position = 'none'), aspect_m + theme(legend.position = 'none'), elevation_m + theme(legend.position = 'none'), landuse_m + theme(legend.position = 'none'), NULL,
-                        build_m + theme(legend.position = 'none'), NVIS_m + theme(legend.position = 'none'), road_m + theme(legend.position = 'none'), NULL, NULL, NULL,
+                        mintemp_m + theme(legend.position = 'none'), aspect_m + theme(legend.position = 'none'), rugged_m + theme(legend.position = 'none'), elevation_m + theme(legend.position = 'none'), landuse_m + theme(legend.position = 'none'), NULL,
+                       build_m + theme(legend.position = 'none'), NVIS_m + theme(legend.position = 'none'), road_m + theme(legend.position = 'none'), NULL, NULL, NULL,
                         nrow = 3, ncol = 6, rel_widths = c(1,1,1,1,1,0.5))
 
 cur_maps
@@ -779,22 +831,11 @@ NVIS_m_pres <- NVIS_m +
 cur_pres_legend <- get_legend(rain_flood_m_pres)
 
 cur_pres_maps <- plot_grid(HSM_m_pres + theme(legend.position = 'none'), NDVI_m_pres + theme(legend.position = "none"), rain_drought_m_pres + theme(legend.position = 'none'), rainfall_m_pres + theme(legend.position = 'none'), rain_flood_m_pres + theme(legend.position = 'none'), cur_pres_legend,
-                      mintemp_m_pres + theme(legend.position = 'none'), rugged_m_pres + theme(legend.position = 'none'), aspect_m_pres + theme(legend.position = 'none'), elevation_m_pres + theme(legend.position = 'none'), landuse_m_pres + theme(legend.position = 'none'), NULL,
+                      mintemp_m_pres + theme(legend.position = 'none'),  aspect_m_pres + theme(legend.position = 'none'), rugged_m_pres + theme(legend.position = 'none'), elevation_m_pres + theme(legend.position = 'none'), landuse_m_pres + theme(legend.position = 'none'), NULL,
                       build_m_pres + theme(legend.position = 'none'), NVIS_m_pres + theme(legend.position = 'none'), road_m_pres + theme(legend.position = 'none'), NULL, NULL, NULL,
                       nrow = 3, ncol = 6, rel_widths = c(1,1,1,1,1,0.5))
 
 cur_pres_maps
 ggsave("./03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps_wpres.png",  width = 55, height = 33.9, units = "cm", dpi = 300, limitsize = FALSE)
 
-# Next steps
-# Incorporate SDM and spatial planning tool - Peter Baxter - spatial conservation planning CBCS
-# Need some infrastructure barrier data - so road data to investigate resistance to movement!
-# Maps illustrating habitat connectivity
-    # Finalised for current connectivity results. 
-
-# Prioritise populations for management based on degree of isolation
-  # How do we want to define a population? Grouping points which are within a minimum distance of each other like 3km which is where populations are genetically distinct. Then we calculate the distance between the populations, create a table ranking them by their isolation distance
-
-# identify areas for restoration with corridor creation or stepping stone habitat
-  # Need some road data and NDVI or landuse to determine areas which would not support this. We could use the habitat suitability map to determine whether these areas are currently considered to be appropriate for BTRW to assist in determining restoration needs
 

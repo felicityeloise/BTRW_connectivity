@@ -38,7 +38,7 @@ unzip(zipfile = './00_Data/Australia_shapefile.zip', exdir = './00_Data/Australi
 Aus <- vect('./00_Data/Australia_shapefile/STE11aAust.shp') %>% 
   project("EPSG:4326")
 
-QLD <- Aus[Aus$STATE_NAME == "Queensland"]
+QLD <- Aus[Aus$STE_NAME21 == "Queensland"]
 QLD 
 
 # Load habitat suitability for BTRW and look at the extent
