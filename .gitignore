@@ -1757,3 +1757,4 @@
 00_Data/Environmental_data/QPWS_fire_history/Fire_history___QPWS.xml
 00_Data/Environmental_data/QPWS_fire_history/QPWS_fire_freq.tif
 01_Scripts/002_resistance_surfaces_notes.R
+04_Workspaces/004_restoration_and_management.RData

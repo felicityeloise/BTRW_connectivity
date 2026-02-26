@@ -2282,7 +2282,7 @@ dog_pop <-
   geom_spatvector(data = BTRW_pop_buf, aes(fill = dog_count, col = dog_count))+
   scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
   scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
-  labs(title = bold("(d) ")~italic(Canis~familiaris), alpha = "")+
+  labs(title = bold("(d) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 dog_pop
@@ -2311,7 +2311,7 @@ dog_corridor <-
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = dog_count, col = dog_count))+
   scale_fill_continuous(name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
   scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
-  labs(title = bold("(h) ")~italic(Canis~familiaris), alpha = "")+
+  labs(title = bold("(h) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 
@@ -2319,7 +2319,7 @@ dog_corridor <-
 lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(i) ")~italic(Lantana~camara))
 cat_spat_p <- cat_spatbias_p + labs(title = bold("(j) ")~italic(Felis~catus))
 fox_spat_p <- fox_spatbias_p + labs(title = bold("(k) ")~italic(Vulpes~vulpes))
-dog_spat_p <- dog_spatbias_p + labs(title = bold("(l) ")~italic(Canis~familiaris))
+dog_spat_p <- dog_spatbias_p + labs(title = bold("(l) ")~italic(Canis~lupus~familiaris))
 
 lantana_leg <- get_legend(lantana_pop)
 cat_leg <- get_legend(cat_pop)
