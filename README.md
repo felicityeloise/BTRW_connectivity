@@ -7,14 +7,13 @@ This project aimed to identify key habitat patches and potential movement corrid
 # Content Description
 00_Data: Occurrence records and spatial data information
 01_Scripts: Scripts for processing and analysis
-02_Functions: All functions used in processing and analysis
 03_Results: Plots and other outputs produced during analysis
 
 # Code Authors
 Felicity Charles
 
 # Research Contributors
-Annabel Smith, Paul Revie, Natlya Maitz
+Annabel Smith and Paul Revie
 
 # License
 The BTRW_connectivity project by Felicity Charles and Annabel Smith is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
