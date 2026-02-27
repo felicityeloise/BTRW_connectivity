@@ -2418,4 +2418,4 @@ nrow(predator_free)
 
 writeVector(BTRW_pop_buf, './03_Results/BTRW_population_buffer_information.gpkg', overwrite = T)
 writeVector(BTRW_connectivity_buf, './03_Results/BTRW_connectivity_buffer_information.gpkg', overwrite = T)
-save.image('./04_Workspaces/004_restoration_and_management.RData')
+save.image('./02_Workspaces/004_restoration_and_management.RData')

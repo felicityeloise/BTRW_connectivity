@@ -180,7 +180,7 @@ geo <- ggplot() +
   labs(x = "", y = "", title = "(a)")
 ggsave("./03_Results/Plots/Population_isolation/Geographic.png", width = 20, height = 16, dpi = 300, units = 'cm')
 
-save.image('./04_Workspaces/003_population_isolation.RData')
+save.image('./02_Workspaces/003_population_isolation.RData')
 
 
 # Reproductive viability ----
