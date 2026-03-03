@@ -17,4 +17,4 @@ Felicity Charles
 Annabel Smith and Paul Revie
 
 # License
-The BTRW_connectivity project by Felicity Charles and Annabel Smith is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+The BTRW_connectivity project by Felicity Charles and Annabel Smith is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
