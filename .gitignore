@@ -1758,3 +1758,20 @@
 00_Data/Environmental_data/QPWS_fire_history/QPWS_fire_freq.tif
 01_Scripts/002_resistance_surfaces_notes.R
 04_Workspaces/004_restoration_and_management.RData
+00_Data/BTRW_data/1_BTRW_Records_All_Combined_Hi_Prec.csv
+00_Data/BTRW_data/BTRW_coords.txt
+00_Data/BTRW_data/BTRW_pres_ext.gpkg
+00_Data/BTRW_data/BTRW_pres_ext_test.gpkg
+00_Data/Pest_occurrence_records/Pest Records All_WPSQ QSA FoPQ.csv
+03_Results/Plots.zip
+03_Results/Plots/.DS_Store
+03_Results/Plots/Circuitscape_Connectivity_maps/.DS_Store
+03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps.png
+03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps_wpres.png
+03_Results/Plots/Connectivity_creation.png
+03_Results/Plots/Fire_regime_management.png
+03_Results/Plots/Pest_management.png
+03_Results/Plots/Population_isolation/.DS_Store
+03_Results/Plots/Population_isolation/Isolation.png
+03_Results/Plots/Revegetation_opportunities_combo.png
+03_Results/Plots/Study_area_without_roads.png
