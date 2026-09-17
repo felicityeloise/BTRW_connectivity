@@ -404,6 +404,33 @@ ggsave("./03_Results/Plots/Connectivity_creation.png", width = 20, height = 32, 
 
 
 
+# Graphical abstract map
+p_dom_con2 <-ggplot()+
+  geom_spatvector(data = Aus, fill = 'transparent')+
+  geom_spatvector(data = BTRW_connectivity_buf[BTRW_connectivity_buf$dom_con == "2"], aes(fill = dom_con, col = dom_con)) +
+  geom_spatvector(data = BTRW_connectivity_buf[BTRW_connectivity_buf$dom_con == "1"], aes(fill = dom_con, col = dom_con)) +
+  scale_fill_manual(values = c("1" = "#252525", "2" = "#969696"), labels = c("1" = "Corridor", "2"  = "Stepping stone habitat"), name = "Dominant connection type") +
+  scale_color_manual(values = c("1" = "#252525", "2" = "#969696"), labels = c("1" = "Corridor", "2"  = "Stepping stone habitat"), name = "Dominant connection type") +
+  theme_bw() +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 17) +
+  theme(legend.key.height = unit(1, 'cm'),
+        legend.key.width = unit(1, 'cm'),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 12),
+        plot.background = element_blank(),
+        legend.background = element_blank(),
+        legend.position = c(0.05, 0.95),
+        legend.justification = c(0, 1))+
+  new_scale_color()+
+  new_scale_fill()+
+  geom_spatvector(data = BTRW_pops, aes(fill = connected), col = 'black', lwd = 0.1) + 
+  scale_fill_manual(values = c("#9ECAE1", "#1F78B4"), labels = c("Low", "High"), name = "Population connectivity", guide = "none") # Supress legend
+p_dom_con2
+ggsave("./03_Results/Plots/Connection_type_graph_ab.png", width = 20, height = 16, dpi = 300, units = 'cm')
+
+
 # How many populations
 BTRW_dom_con_pop <- BTRW_connectivity_buf %>% 
   distinct(pop_id, dom_con, .keep_all = TRUE)
@@ -1527,28 +1554,32 @@ max(plo_lantana_masked$sampling_bias, na.rm = T)
 lantana_spatbias_p <- ggplot()+
   geom_raster(data = plo_lantana_masked, aes(x = x, y = y, fill = sampling_bias))+
   theme_bw()+
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.6) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.3, "cm"), width = unit(0.7, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
+    legend.box = 'vertical',
     legend.direction = "horizontal",
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm')
   )+
   scale_fill_viridis_c(
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
-    limits = c(0, 0.252)
-  ) +
+    limits = c(0, 0.2591),
+    breaks = c(0, 0.259)) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
@@ -1692,28 +1723,32 @@ max(plo_fox_masked$sampling_bias, na.rm = T)
 fox_spatbias_p <- ggplot()+
   geom_raster(data = plo_fox_masked, aes(x = x, y = y, fill = sampling_bias))+
   theme_bw()+
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
+    legend.box = 'vertical',
     legend.direction = "horizontal",
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm')
   )+
   scale_fill_viridis_c(
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
     limits = c(0.005, 0.029),
-    breaks = c(0.005, 0.01, 0.015, 0.02, 0.025, 0.029)
+    breaks = c(0.005, 0.029)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -1858,28 +1893,32 @@ max(plo_cat_masked$sampling_bias, na.rm = T)
 cat_spatbias_p <- ggplot()+
   geom_raster(data = plo_cat_masked, aes(x = x, y = y, fill = sampling_bias))+
   theme_bw()+
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
     legend.direction = "horizontal",
+    legend.box = 'vertical',
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm')
   )+
   scale_fill_viridis_c(
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
     limits = c(0.0090, 0.00935),
-    breaks = c(0.0090, 0.0091, 0.0092, 0.00935)
+    breaks = c(0.0090, 0.00935)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -2023,28 +2062,32 @@ max(plo_dog_masked$sampling_bias, na.rm = T)
 dog_spatbias_p <- ggplot()+
   geom_raster(data = plo_dog_masked, aes(x = x, y = y, fill = sampling_bias))+
   theme_bw()+
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
     legend.direction = "horizontal",
+    legend.box = 'vertical',
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm')
   )+
   scale_fill_viridis_c(
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
     limits = c(0.0102, 0.01043),
-    breaks = c(0.0102, 0.0103, 0.01043)
+    breaks = c(0.0102, 0.01043)
   ) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
@@ -2090,25 +2133,30 @@ BTRW_pop_buf <- BTRW_pop_buf %>%
 lantana_pop <- ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
     legend.direction = "horizontal",
+    legend.box = "vertical",
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm'),
+    plot.title = element_text(size = 34)
   )+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = lantana_count, col = lantana_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,20,40,60,70)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,20,40,60,70)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70)) +
   labs(title = bold("(a) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2118,25 +2166,30 @@ lantana_pop <- ggplot()+
 lantana_corridor <- ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
     legend.direction = "horizontal",
+    legend.box = "vertical",
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm'),
+    plot.title = element_text(size = 34)
   )+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = lantana_count, col = lantana_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,20,40,60,70), limits = c(1,70)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,20,40,60,70), limits = c(1,70)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,25,50,70), limits = c(1,70)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,25,50,70), limits = c(1,70)) +
   labs(title = bold("(e) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2149,25 +2202,30 @@ cat_pop <-
   ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(
     legend.position = "bottom",
     legend.direction = "horizontal",
+    legend.box = "vertical",
     legend.title.position = "top",
     legend.key.height = unit(0.4, 'cm'),
     legend.key.width = unit(1.5, 'cm'),
-    legend.title = element_text(face = 'bold', size = 14),
-    legend.text = element_text(size = 12),
+    legend.title = element_text(face = 'bold', size = 32),
+    legend.text = element_text(size = 28),
     plot.background = element_blank(),
     plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-    legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-    legend.margin = margin(4, 0, 0, 0)
+    legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+    legend.margin = margin(0, 0, 0, 0),
+    legend.spacing = unit(0, 'cm'),
+    legend.box.spacing = unit(0, 'cm'),
+    legend.spacing.y = unit(0, 'cm'),
+    plot.title = element_text(size = 34)
   )+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = cat_count, col = cat_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
   labs(title = bold("(b) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2179,23 +2237,28 @@ cat_corridor <-
   ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(legend.position = "bottom",
-         legend.direction = "horizontal",
+        legend.direction = "horizontal",
+        legend.box = "vertical",
          legend.title.position = "top",
          legend.key.height = unit(0.4, 'cm'),
          legend.key.width = unit(1.5, 'cm'),
-         legend.title = element_text(face = 'bold', size = 14),
-         legend.text = element_text(size = 12),
+         legend.title = element_text(face = 'bold', size = 32),
+         legend.text = element_text(size = 28),
          plot.background = element_blank(),
          plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-         legend.margin = margin(4, 0, 0, 0))+
+         legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+         legend.margin = margin(0, 0, 0, 0),
+        legend.spacing = unit(0, 'cm'),
+        legend.box.spacing = unit(0, 'cm'),
+        legend.spacing.y = unit(0, 'cm'),
+        plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = cat_count, col = cat_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,2,4,6,8,10,12,14,16,18,21)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
   labs(title = bold("(f) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2208,23 +2271,28 @@ fox_pop <-
   ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(legend.position = "bottom",
-         legend.direction = "horizontal",
+        legend.direction = "horizontal",
+        legend.box = "vertical",
          legend.title.position = "top",
          legend.key.height = unit(0.4, 'cm'),
          legend.key.width = unit(1.5, 'cm'),
-         legend.title = element_text(face = 'bold', size = 14),
-         legend.text = element_text(size = 12),
+         legend.title = element_text(face = 'bold', size = 32),
+         legend.text = element_text(size = 28),
          plot.background = element_blank(),
          plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-         legend.margin = margin(4, 0, 0, 0))+
+         legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+         legend.margin = margin(0, 0, 0, 0),
+        legend.spacing = unit(0, 'cm'),
+        legend.box.spacing = unit(0, 'cm'),
+        legend.spacing.y = unit(0, 'cm'),
+        plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = fox_count, col = fox_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
   labs(title = bold("(c) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2235,23 +2303,28 @@ fox_corridor <-
   ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(legend.position = "bottom",
         legend.direction = "horizontal",
+        legend.box = "vertical",
         legend.title.position = "top",
         legend.key.height = unit(0.4, 'cm'),
         legend.key.width = unit(1.5, 'cm'),
-        legend.title = element_text(face = 'bold', size = 14),
-        legend.text = element_text(size = 12),
+        legend.title = element_text(face = 'bold', size = 32),
+        legend.text = element_text(size = 28),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-        legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-        legend.margin = margin(4, 0, 0, 0))+
+        legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+        legend.margin = margin(0, 0, 0, 0),
+        legend.spacing = unit(0, 'cm'),
+        legend.box.spacing = unit(0, 'cm'),
+        legend.spacing.y = unit(0, 'cm'),
+        plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = fox_count, col = fox_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,2,4,6,8,10,12,14,16,19)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
   labs(title = bold("(g) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2265,23 +2338,28 @@ dog_pop <-
   ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme( legend.position = "bottom",
          legend.direction = "horizontal",
+         legend.box = "vertical",
          legend.title.position = "top",
          legend.key.height = unit(0.4, 'cm'),
          legend.key.width = unit(1.5, 'cm'),
-         legend.title = element_text(face = 'bold', size = 14),
-         legend.text = element_text(size = 12),
+         legend.title = element_text(face = 'bold', size = 32),
+         legend.text = element_text(size = 28),
          plot.background = element_blank(),
          plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-         legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-         legend.margin = margin(4, 0, 0, 0))+
+         legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+         legend.margin = margin(0, 0, 0, 0),
+         legend.spacing = unit(0, 'cm'),
+         legend.box.spacing = unit(0, 'cm'),
+         legend.spacing.y = unit(0, 'cm'),
+         plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = dog_count, col = dog_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,4,8,12)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12)) +
   labs(title = bold("(d) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
@@ -2294,32 +2372,37 @@ dog_corridor <-
   ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme_cowplot(font_size = 17) +
+  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.9, "cm"), text_cex = 1.8) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.5, "cm"), width = unit(0.9, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.07, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 32) +
   theme(legend.position = "bottom",
         legend.direction = "horizontal",
+        legend.box = "vertical",
         legend.title.position = "top",
         legend.key.height = unit(0.4, 'cm'),
         legend.key.width = unit(1.5, 'cm'),
-        legend.title = element_text(face = 'bold', size = 14),
-        legend.text = element_text(size = 12),
+        legend.title = element_text(face = 'bold', size = 32),
+        legend.text = element_text(size = 28),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0, 0.5, 0), "cm"),
-        legend.box.margin = unit(c(0, 0, 0, 0), "cm"),
-        legend.margin = margin(4, 0, 0, 0))+
+        legend.box.margin = unit(c(0, 0, 0, 2), "cm"),
+        legend.margin = margin(0, 0, 0, 0),
+        legend.spacing = unit(0, 'cm'),
+        legend.box.spacing = unit(0, 'cm'),
+        legend.spacing.y = unit(0, 'cm'),
+        plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = dog_count, col = dog_count))+
-  scale_fill_continuous(name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
-  scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,2,4,6,8,10,12), na.value = "#D9D9D9") +
+  scale_fill_continuous(name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9") +
+  scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9") +
   labs(title = bold("(h) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
   scale_alpha_continuous(labels = "BTRW population")
 
 
-lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(i) ")~italic(Lantana~camara))
-cat_spat_p <- cat_spatbias_p + labs(title = bold("(j) ")~italic(Felis~catus))
-fox_spat_p <- fox_spatbias_p + labs(title = bold("(k) ")~italic(Vulpes~vulpes))
-dog_spat_p <- dog_spatbias_p + labs(title = bold("(l) ")~italic(Canis~lupus~familiaris))
+lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(i) ")~italic(Lantana~camara)) + theme(plot.title = element_text(size = 36))
+cat_spat_p <- cat_spatbias_p + labs(title = bold("(j) ")~italic(Felis~catus))+ theme(plot.title = element_text(size = 36))
+fox_spat_p <- fox_spatbias_p + labs(title = bold("(k) ")~italic(Vulpes~vulpes))+ theme(plot.title = element_text(size = 36))
+dog_spat_p <- dog_spatbias_p + labs(title = bold("(l) ")~italic(Canis~lupus~familiaris))+ theme(plot.title = element_text(size = 36))
 
 lantana_leg <- get_legend(lantana_pop)
 cat_leg <- get_legend(cat_pop)
@@ -2349,11 +2432,10 @@ pest_plot <- plot_grid(
   align = "hv",
   axis = "tblr",
   nrow = 5,
-  rel_heights = c(1, 1, 0.15, 1, 0.15)
-)
+  rel_heights = c(1, 1, 0.3, 1, 0.35)) +
+  theme(plot.margin = unit(c(0.5, 0.7, 0.5, 0.7), "cm"))
 
-pest_plot + theme(plot.margin = unit(c(0.5, 0.5, 0.5, 1), "cm"))
-ggsave("./03_Results/Plots/Pest_management.png", width = 66, height = 63, dpi = 300, units = 'cm')
+ggsave("./03_Results/Plots/Pest_management.png", width = 105, height = 99, dpi = 300, units = 'cm')
 
 
 

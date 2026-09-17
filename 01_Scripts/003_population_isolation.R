@@ -53,7 +53,7 @@ places <- vect('./00_Data/Environmental_data/Place_names/Place_names_gazetteer.s
 places <- places[places$place_name =="Brisbane"| places$place_name =="Toowoomba"| places$place_name =="Esk" | places$place_name == "Boonah"]
 places <- places[!duplicated(places$place_name),]
 
-Aus <- vect('./00_Data/Australia_shapefile/STE11aAust.shp') %>% 
+Aus <- vect('./00_Data/Australia_shapefile/STE_2021_AUST_GDA2020.shp') %>% 
   project("EPSG:3577") %>% 
   crop(e)
 
@@ -169,7 +169,7 @@ geo <- ggplot() +
         legend.direction = "horizontal",
         legend.key.height = unit(0.5, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 18),
+        legend.title = element_text(size = 18),
         legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = margin(t = 0.1, r = 0.2, b = 0.1, l = 0.2, unit = "cm")) +
@@ -232,7 +232,7 @@ tempo <- ggplot() +
         legend.direction = "horizontal",
         legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 18),
+        legend.title = element_text(size = 18),
         legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = margin(t = 0.1, r = 0.2, b = 0.1, l = 0.2, unit = "cm")) +
@@ -245,5 +245,5 @@ ggsave("./03_Results/Plots/Population_isolation/Persistence.png", width = 20, he
 
 
 plot_grid(geo, tempo, nrow = 1)
-ggsave("./03_Results/Plots/Population_isolation/Isolation.png", width = 20, height = 16, dpi = 300, units = 'cm')
+ggsave("./03_Results/Plots/Population_isolation/Isolation_v2.png", width = 20, height = 16, dpi = 300, units = 'cm')
 # Could evaluate population isolation in a more sophisticated manner by incorporating the temporal aspect but whether this is useful being a cryptic species and we don't know have information on absences, this may just be useful to provide some information on which populations to check in on

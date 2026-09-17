@@ -839,3 +839,28 @@ cur_pres_maps
 ggsave("./03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps_wpres.png",  width = 55, height = 33.9, units = "cm", dpi = 300, limitsize = FALSE)
 
 
+
+
+
+# Graphical abstract map
+NDVI_m <-ggplot()+
+  geom_spatraster(data = NDVI_cur) +
+  scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1), guide = 'none') +
+  annotation_scale(location = "bl", pad_y = unit(0.3, 'cm'), pad_x = unit(1, 'cm'), text_cex = 1.2)+
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.1, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme(plot.background = element_blank(),
+        plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"),
+        legend.position = 'none')+
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
+  coord_sf(clip = 'off') +
+  geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
+  labs(x = "", y = "") 
+
+NDVI_m_pres <- NDVI_m + 
+  geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
+  scale_alpha_continuous(labels = "BTRW presences")+
+  theme(legend.position = 'none')+
+  coord_sf(clip = 'off')
+
+ggsave("./03_Results/Plots/Connectivity_graph_ab.png", width = 20, height = 16, dpi = 300, units = 'cm')

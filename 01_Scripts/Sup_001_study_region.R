@@ -83,17 +83,17 @@ levels(landuse_poly$SIMP)
 BVG <- rast('./00_Data/Environmental_data/NVIS_V7_0_AUST_RASTERS_EXT_ALL/NVIS_V7_0_AUST_EXT.gdb', lyrs = "NVIS7_0_AUST_EXT_MVG_ALB")
 BVG <-  crop(project(BVG, 'EPSG:3577'), e)
 unique(BVG$NVIS7_0_AUST_EXT_MVG_ALB)
-BVG1 <- BVG
 
 BVG$remnant <- as.factor(ifel(BVG$NVIS7_0_AUST_EXT_MVG_ALB == "Sea and estuaries" | BVG$NVIS7_0_AUST_EXT_MVG_ALB == "Inland aquatic - freshwater, salt lakes, lagoons" | BVG$NVIS7_0_AUST_EXT_MVG_ALB == "Cleared, non-native vegetation, buildings" | BVG$NVIS7_0_AUST_EXT_MVG_ALB == "Naturally bare - sand, rock, claypan, mudflat", NA, 1))
+head(BVG)
 
-roads <- vect('./00_Data/Environmental_data/Roads_and_tracks/Queensland_roads_and_tracks.shp') %>% 
-  project("EPSG:3577") %>% 
-  crop(e)
-head(roads)
-roads$type <- ifelse(roads$class == "Motorway" | roads$class == "Highway" | roads$class == "Secondary" | roads$class == "Connector" | roads$class == "Busway", "Major", NA)
-roads$type <- ifelse(roads$class == "Local", "Minor", roads$type)
-unique(roads$type)
+# Want to have two greens to display remnant vegetation cover "#BAE4B3" for non-protected areas and #6f886b for protected areas
+cons_poly <- landuse_poly[landuse_poly$SIMP == "Conservation area", ]
+cons_rast <- rasterize(cons_poly, BVG, field = 1, background = 0)
+
+
+BVG$remnant_cons <- as.factor(ifel(BVG$remnant == 1 & cons_rast == 1, 1, ifel(BVG$remnant == 1 & cons_rast == 0, 2, NA))) # 1 = conservation, 2 = non-conservation land
+
 
 # Create study area map ----
 # Plot remnant vegetation cover as background, overlay black polygon outlines for conservation areas. Use patterns for agricultural land and residential land
@@ -107,33 +107,14 @@ display.brewer.all()
 brewer.pal(9, "Blues")
 pal <- c("#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#08519C", "#08306B")
 
+# To figure out the colouring of remnant veg on map
+blended <- col2rgb("#94b68f")/255 * 0.4 + col2rgb("#252525")/255 * 0.6
+rgb(blended[1], blended[2], blended[3])
 
 
+blended_non_cons <- col2rgb("#BAE4B3")/255 * 0.4 + col2rgb("#969696")/255 * 0.6 # #BAE4B3 at 0.4 alpha over agricultural grey
+rgb(blended_non_cons[1], blended_non_cons[2], blended_non_cons[3])
 
-# With roads
-ggplot()+
-  geom_spatvector(data = Aus, fill = 'transparent')+
-  theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme(legend.key.height = unit(1, 'cm'),
-        legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 14),
-        legend.text = element_text(size = 12),
-        plot.background = element_blank())+
-  theme_cowplot(font_size = 17) +
-  geom_spatvector(data = landuse_poly, aes(fill = SIMP), col = NA) +
-  scale_fill_manual(values = c("#CCCCCC", "#969696", "#636363"), labels = c("Residential", "Agricultural and \nother intensive use", "Conservation and \nminimal use"), name = "Land use") +
-  new_scale_fill()+
-  geom_spatraster(data = BVG, aes(fill = remnant), alpha = 0.4) +
-  scale_fill_manual(values = c("1" = "#BAE4B3"), na.value = "transparent", na.translate = FALSE, name = 'Remnant vegetation', labels = NULL) + # NA.translate makes sure NAs are not added to the legend
-  geom_spatvector(data = BTRW_cds, fill = NA, size = 0.7, aes(col = year)) +
-  scale_color_continuous(palette = pal, breaks = c(1990, 2000, 2010, 2020, 2025), name = 'BTRW record year')+
-  geom_spatvector(data = roads, col = 'black', aes(lwd = type))+
-  scale_linewidth_manual(name = 'Road type', na.translate = F, values = c(0.3, 0.1), guide = guide_legend(override.aes = list(fill = NA)))
-ggsave("./03_Results/Plots/Study_area.png", width = 22, height = 18, dpi = 300, units = 'cm')
-
-# without roads
 ggplot()+
   geom_spatvector(data = Aus, fill = 'transparent')+
   theme_bw() +
@@ -148,8 +129,8 @@ ggplot()+
   geom_spatvector(data = landuse_poly, aes(fill = SIMP), col = NA) +
   scale_fill_manual(values = c("Residential land" = "#F0F0F0", "Agricultural or intensive use land" = "#969696", "Conservation area" = "#252525"),  labels = c("Residential", "Conservation and \nminimal use", "Agricultural and \nother intensive use"), name = "Land use") +
   new_scale_fill()+
-  geom_spatraster(data = BVG, aes(fill = remnant), alpha = 0.4) +
-  scale_fill_manual(values = c("1" = "#BAE4B3"), na.value = "transparent", na.translate = FALSE, name = 'Remnant vegetation', labels = NULL) + # NA.translate makes sure NAs are not added to the legend
+  geom_spatraster(data = BVG, aes(fill = remnant_cons), alpha = 0.4) +
+  scale_fill_manual(values = c("1" = "#94b68f", "2" = "#BAE4B3"), na.value = "transparent", na.translate = FALSE, name = "Remnant vegetation", labels = c("Conservation land", "Non-conservation land"), breaks = c("1", "2"), guide = guide_legend(override.aes = list(fill = c("#515F4F", "#A4B5A2"), alpha = 1))) + # NA.translate makes sure NAs are not added to the legend
   geom_spatvector(data = BTRW_cds, fill = NA, size = 0.7, aes(col = year)) +
   scale_color_continuous(palette = pal, breaks = c(1990, 2000, 2010, 2020, 2025), name = 'BTRW record year') +
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1)+
@@ -160,27 +141,3 @@ ggsave("./03_Results/Plots/Study_area_without_roads.png", width = 22, height = 1
 
 
 
-# Below has green colour scale for landuse with remnant vegetation mapped in gray
-
-ggplot()+
-  geom_spatvector(data = Aus, fill = 'transparent')+
-  theme_bw() +
-  annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
-  theme(legend.key.height = unit(1, 'cm'),
-        legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 14),
-        legend.text = element_text(size = 12),
-        plot.background = element_blank())+
-  theme_cowplot(font_size = 17) +
-  geom_spatvector(data = landuse_poly, aes(fill = SIMP), col = NA) +
-  scale_fill_manual(values = c("#E5F5E0", "#A1D99B", "#31A354"), labels = c("Residential", "Agricultural and other \nintensive use", "Conservation and minimal use"), name = "Land use") +
-  new_scale_fill()+
-  geom_spatraster(data = BVG, aes(fill = remnant), alpha = 0.4) +
-  scale_fill_manual(values = c("1" = "gray20"), na.value = "transparent", na.translate = FALSE, name = 'Remnant vegetation', labels = NULL) + # NA.translate makes sure NAs are not added to the legend
-  geom_spatvector(data = BTRW_cds, fill = NA, size = 0.7, aes(col = year)) +
-  scale_color_continuous(palette = pal, breaks = c(1990, 2000, 2010, 2020, 2025), name = 'BTRW record year')
-ggsave("./03_Results/Plots/Study_area.png", width = 20, height = 16, dpi = 300, units = 'cm')
-
-  
-  
