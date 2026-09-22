@@ -1580,7 +1580,8 @@ lantana_spatbias_p <- ggplot()+
     na.value = "transparent",
     name = "Estimated sampling rate",
     limits = c(0, 0.2563),
-    breaks = c(0, 0.256)) +
+    breaks = c(0, 0.256),
+    guide = guide_colourbar(order = 1)) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
@@ -1755,8 +1756,8 @@ fox_spatbias_p <- ggplot()+
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))+
-  labs(alpha = "")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
+labs(alpha = "")
 
 
 
@@ -2156,11 +2157,11 @@ lantana_pop <- ggplot()+
     plot.title = element_text(size = 34)
   )+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = lantana_count, col = lantana_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70), guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70), guide = guide_colourbar(order = 1)) +
   labs(title = bold("(a) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 
 
 
@@ -2194,7 +2195,7 @@ lantana_corridor <- ggplot()+
   scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,25,50,70), limits = c(1,70)) +
   labs(title = bold("(e) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 
 
 
@@ -2226,11 +2227,11 @@ cat_pop <-
     plot.title = element_text(size = 34)
   )+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = cat_count, col = cat_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,7,14,21), guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21), guide = guide_colourbar(order = 1)) +
   labs(title = bold("(b) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 cat_pop
 
 
@@ -2259,11 +2260,11 @@ cat_corridor <-
         legend.spacing.y = unit(0, 'cm'),
         plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = cat_count, col = cat_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,21), breaks = c(1,7,14,21), guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21), guide = guide_colourbar(order = 1)) +
   labs(title = bold("(f) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 
 
 
@@ -2293,11 +2294,11 @@ fox_pop <-
         legend.spacing.y = unit(0, 'cm'),
         plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = fox_count, col = fox_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,6,12,19), guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19), guide = guide_colourbar(order = 1)) +
   labs(title = bold("(c) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 fox_pop
 
 
@@ -2325,11 +2326,11 @@ fox_corridor <-
         legend.spacing.y = unit(0, 'cm'),
         plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = fox_count, col = fox_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,19), breaks = c(1,6,12,19), guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19), guide = guide_colourbar(order = 1)) +
   labs(title = bold("(g) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 
 
 
@@ -2360,11 +2361,11 @@ dog_pop <-
          legend.spacing.y = unit(0, 'cm'),
          plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_pop_buf, aes(fill = dog_count, col = dog_count))+
-  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,4,8,12)) +
-  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12)) +
+  scale_fill_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), guide = guide_colourbar(order = 1)) +
   labs(title = bold("(d) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 dog_pop
 
 
@@ -2394,11 +2395,11 @@ dog_corridor <-
         legend.spacing.y = unit(0, 'cm'),
         plot.title = element_text(size = 34))+
   geom_spatvector(data = BTRW_connectivity_buf, aes(fill = dog_count, col = dog_count))+
-  scale_fill_continuous(name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9") +
-  scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9") +
+  scale_fill_continuous(name = "Number of records", palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9", guide = guide_colourbar(order = 1)) +
+  scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9", guide = guide_colourbar(order = 1)) +
   labs(title = bold("(h) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5), order = 2))
 
 
 lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(i) ")~italic(Lantana~camara)) + theme(plot.title = element_text(size = 36))
