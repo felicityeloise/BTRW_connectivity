@@ -169,7 +169,7 @@ geo <- ggplot() +
         legend.direction = "horizontal",
         legend.key.height = unit(0.5, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(size = 18),
+        legend.title = element_text(face = "bold", size = 18),
         legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = margin(t = 0.1, r = 0.2, b = 0.1, l = 0.2, unit = "cm")) +
@@ -232,7 +232,7 @@ tempo <- ggplot() +
         legend.direction = "horizontal",
         legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(size = 18),
+        legend.title = element_text(face = "bold", size = 18),
         legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = margin(t = 0.1, r = 0.2, b = 0.1, l = 0.2, unit = "cm")) +
@@ -240,7 +240,7 @@ tempo <- ggplot() +
                              title.hjust = 0.5,
                              nrow = 1)) +
   labs(x = "", y = "", title = "(b)")
-ggsave("./03_Results/Plots/Population_isolation/Persistence.png", width = 20, height = 16, dpi = 300, units = 'cm')
+ggsave("./03_Results/Plots/Population_isolation/Isolation.png", width = 20, height = 16, dpi = 300, units = 'cm')
 
 
 

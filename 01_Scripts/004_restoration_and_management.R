@@ -344,12 +344,12 @@ p_con <- ggplot()+
   theme_bw()+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 17) +
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
         legend.text = element_text(size = 12),
         plot.background = element_blank())+
-  theme_cowplot(font_size = 17) +
   new_scale_color()+
   new_scale_fill()+
   geom_spatvector(data = BTRW_pops, aes(fill = connected), col = 'black', lwd = 0.1) + 
@@ -384,6 +384,7 @@ p_dom_con <-ggplot()+
   scale_fill_manual(values = c("1" = "#252525", "2" = "#969696"), labels = c("1" = "Corridor", "2"  = "Stepping stone habitat"), name = "Dominant connection type") +
   scale_color_manual(values = c("1" = "#252525", "2" = "#969696"), labels = c("1" = "Corridor", "2"  = "Stepping stone habitat"), name = "Dominant connection type") +
   theme_bw() +
+  theme_cowplot(font_size = 17) +
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
@@ -391,7 +392,6 @@ p_dom_con <-ggplot()+
         legend.title = element_text(face = 'bold', size = 14),
         legend.text = element_text(size = 12),
         plot.background = element_blank())+
-  theme_cowplot(font_size = 17) +
   new_scale_color()+
   new_scale_fill()+
   geom_spatvector(data = BTRW_pops, aes(fill = connected), col = 'black', lwd = 0.1) + 
@@ -513,6 +513,7 @@ freq_stat <-
   theme_bw()+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 17) +
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
@@ -520,8 +521,7 @@ freq_stat <-
         plot.background = element_blank())+
   geom_spatvector(data = BTRW_pops, fill = NA, col = "black", size = 1, aes(alpha = 1), linewidth = 0.1) +
   labs(fill = "Fire frequency \nstatus", col = "Fire frequency \nstatus", title = "(b)", alpha = "") +
-  scale_alpha_continuous(labels = "BTRW population") +
-  theme_cowplot(font_size = 17) 
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 freq_stat
 
 fire_freq_r <- round(fire_freq)
@@ -531,15 +531,15 @@ fire_hist <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(1,9), breaks = c(1, 3, 5, 7, 9)) +
   labs(fill = 'Fire frequency', title = "(a)")+
   theme_bw()+
+  theme_cowplot(font_size = 17)+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
         legend.text = element_text(size = 12),
-        plot.background = element_blank())+
-  theme_cowplot(font_size = 17)
-
+        plot.background = element_blank())
+fire_hist
 
 
 # Determine the distribution of populations to each frequency status over each distance buffer
@@ -614,6 +614,7 @@ cor_freq <- ggplot() +
   theme_bw()+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
@@ -621,8 +622,7 @@ cor_freq <- ggplot() +
         plot.background = element_blank())+
   geom_spatvector(data = BTRW_pops, fill = NA, col = "black", size = 1, aes(alpha = 1), linewidth = 0.1) +
   labs(fill = "Fire frequency \nstatus", col = "Fire frequency \nstatus", title = "(c)", alpha = "") +
-  scale_alpha_continuous(labels = "BTRW population") +
-  theme_cowplot(font_size = 17)
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 cor_freq
 
 
@@ -670,6 +670,7 @@ ggplot() +
   theme_bw()+
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
@@ -677,8 +678,8 @@ ggplot() +
         plot.background = element_blank())+
   geom_spatvector(data = BTRW_pops, fill = NA, col = "black", size = 1, aes(alpha = 1), linewidth = 0.1) +
   labs(fill = "Fire frequency \nstatus", col = "Fire frequency \nstatus", title = "(c)", alpha = "") +
-  scale_alpha_continuous(labels = "BTRW population") +
-  theme_cowplot(font_size = 17)
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+
 
 # 7. Sites for revegetation -----
 # Does the site have remnant vegetation cover
@@ -824,7 +825,7 @@ veg_pop <-
     scale_fill_continuous(palette = pal2, breaks = c(0,1,2,3,4), labels = c('Naturally bare', 'Remnant optimal NDVI', ' Remnant suboptimal NDVI', 'Non-remnant optimal NDVI', 'Non-remnant suboptimal NDVI'), name = 'Vegetation cover', na.value = 'transparent') +
   labs(title = "(a)", alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1)) +
-  scale_alpha_continuous(labels = "BTRW population") 
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 veg_pop
 
 veg_con <- 
@@ -846,7 +847,7 @@ veg_con <-
   scale_fill_continuous(palette = pal2, breaks = c(0,1,2,3,4), labels = c('Naturally bare', 'Remnant optimal NDVI', ' Remnant suboptimal NDVI', 'Non-remnant optimal NDVI', 'Non-remnant suboptimal NDVI'), name = 'Vegetation cover', na.value = 'transparent') +
   labs(title = "(b)", alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population") 
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 veg_con
 
 plot_grid(veg_pop, veg_con + theme(legend.position = "none"), align = 'v', nrow = 2)
@@ -1578,13 +1579,13 @@ lantana_spatbias_p <- ggplot()+
     option = "viridis",
     na.value = "transparent",
     name = "Estimated sampling rate",
-    limits = c(0, 0.2591),
-    breaks = c(0, 0.259)) +
+    limits = c(0, 0.2563),
+    breaks = c(0, 0.256)) +
   theme(axis.title = element_blank()) +
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population") +
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))+
   labs(alpha = "")
 
 
@@ -1754,7 +1755,7 @@ fox_spatbias_p <- ggplot()+
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population") +
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))+
   labs(alpha = "")
 
 
@@ -1924,7 +1925,7 @@ cat_spatbias_p <- ggplot()+
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population") +
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))+
   labs(alpha = "")
 
 
@@ -2093,7 +2094,7 @@ dog_spatbias_p <- ggplot()+
   new_scale_fill() +
   geom_spatvector(data = Aus, fill = 'transparent')+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population") +
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))+
   labs(alpha = "")
 
 # 8.6.5 Extract spatial bias information for populations and corridors for each species  ----
@@ -2159,7 +2160,8 @@ lantana_pop <- ggplot()+
   scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, limits = c(1,70), breaks = c(1,25,50,70)) +
   labs(title = bold("(a) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
+
 
 
 
@@ -2192,7 +2194,7 @@ lantana_corridor <- ggplot()+
   scale_colour_continuous(na.value = "#D9D9D9", name = "Number of records", palette = pal3, breaks = c(1,25,50,70), limits = c(1,70)) +
   labs(title = bold("(e) ")~italic(Lantana~camara), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 
 
 
@@ -2228,7 +2230,7 @@ cat_pop <-
   scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
   labs(title = bold("(b) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 cat_pop
 
 
@@ -2261,7 +2263,7 @@ cat_corridor <-
   scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,21), breaks = c(1,7,14,21)) +
   labs(title = bold("(f) ")~italic(Felis~catus), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 
 
 
@@ -2295,7 +2297,7 @@ fox_pop <-
   scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
   labs(title = bold("(c) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 fox_pop
 
 
@@ -2327,7 +2329,7 @@ fox_corridor <-
   scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,19), breaks = c(1,6,12,19)) +
   labs(title = bold("(g) ")~italic(Vulpes~vulpes), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 
 
 
@@ -2362,7 +2364,7 @@ dog_pop <-
   scale_colour_continuous(na.value = "#D9D9D9", name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12)) +
   labs(title = bold("(d) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 dog_pop
 
 
@@ -2396,7 +2398,7 @@ dog_corridor <-
   scale_colour_continuous(name = 'Number of records', palette = pal3, limits = c(1,12), breaks =c(1,4,8,12), na.value = "#D9D9D9") +
   labs(title = bold("(h) ")~italic(Canis~lupus~familiaris), alpha = "")+
   geom_spatvector(data = BTRW_pops, col = 'black', lwd = 0.3, fill = NA, aes(alpha = 1))+
-  scale_alpha_continuous(labels = "BTRW population")
+  scale_alpha_continuous(labels = expression(bold("BTRW population")), guide = guide_legend(override.aes = list(linewidth = 0.5)))
 
 
 lantana_spat_p <- lantana_spatbias_p + labs(title = bold("(i) ")~italic(Lantana~camara)) + theme(plot.title = element_text(size = 36))

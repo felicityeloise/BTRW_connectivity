@@ -120,12 +120,12 @@ ggplot()+
   theme_bw() +
   annotation_scale(location = 'bl', pad_y = unit(0.2, 'cm'), pad_x = unit(0.7, "cm"), text_cex = 1.2) +
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.5, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(0.05, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_cowplot(font_size = 17) +
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 14),
         legend.text = element_text(size = 12),
         plot.background = element_blank())+
-  theme_cowplot(font_size = 17) +
   geom_spatvector(data = landuse_poly, aes(fill = SIMP), col = NA) +
   scale_fill_manual(values = c("Residential land" = "#F0F0F0", "Agricultural or intensive use land" = "#969696", "Conservation area" = "#252525"),  labels = c("Residential", "Conservation and \nminimal use", "Agricultural and \nother intensive use"), name = "Land use") +
   new_scale_fill()+

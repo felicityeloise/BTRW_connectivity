@@ -462,14 +462,14 @@ HSM_m <- ggplot()+
   labs(fill = "Connectivity", title = "(a) Habitat suitability", subtitle = "") +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off') +
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -482,14 +482,14 @@ NDVI_m <-ggplot()+
   labs(fill = "Connectivity", title = "(b) NDVI", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.893"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off') +
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -501,14 +501,14 @@ rain_drought_m <- ggplot()+
   labs(fill = "Connectivity", title = "(c) Rainfall 1990-2010", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.877"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -521,14 +521,14 @@ rainfall_m <- ggplot()+
   labs(fill = "Connectivity", title = "(d) Rainfall", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.876"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -541,14 +541,14 @@ rain_flood_m <- ggplot()+
   labs(fill = "Connectivity", title = "(e) Rainfall 2011-2024", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.874"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -561,6 +561,8 @@ mintemp_m <- ggplot()+
   labs(fill = "Connectivity", title = "(f) Minimum temperature", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.863"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
@@ -568,8 +570,6 @@ mintemp_m <- ggplot()+
         plot.background = element_blank(),
         plot.title = element_text(hjust = 0),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -581,14 +581,14 @@ aspect_m <- ggplot()+
   labs(fill = "Connectivity", title = "(g) Aspect", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.760"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -602,14 +602,14 @@ rugged_m <- ggplot()+
   labs(fill = "Connectivity", title = "(h) Ruggedness", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.754"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -622,14 +622,14 @@ elevation_m <- ggplot()+
   labs(fill = "Connectivity", title = "(i) Elevation", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.713"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -641,14 +641,14 @@ landuse_m <- ggplot()+
   labs(fill = "Connectivity", title = "(j) Landuse", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.646"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -662,14 +662,14 @@ build_m <- ggplot()+
   labs(fill = "Connectivity", title = "(k) Buildings", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.516"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -681,14 +681,14 @@ NVIS_m <- ggplot()+
   labs(fill = "Connectivity", title = "(l) Broad vegetation group", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.469"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -701,14 +701,14 @@ road_m <- ggplot()+
   labs(fill = "Connectivity", title = "(m) Roads", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.444"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
   annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  theme_bw() +
+  theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
         legend.title = element_text(face = 'bold', size = 25),
         legend.text = element_text(size = 20),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
-  theme_bw() +
-  theme_cowplot(font_size = 17)+
   coord_sf(clip = 'off')+
   geom_sf_text(data = places, aes(label = place_name, geometry = geometry), show.legend = F, fontface = 'bold', size = 3.1, col = 'gray60') +
   labs(x = "", y = "")
@@ -730,28 +730,28 @@ ggsave("./03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps.png"
 HSM_m_pres <- HSM_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
 NDVI_m_pres <- NDVI_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
 mintemp_m_pres <- mintemp_m +
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
 rainfall_m_pres <- rainfall_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -759,7 +759,7 @@ rainfall_m_pres <- rainfall_m +
 aspect_m_pres <- aspect_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -767,7 +767,7 @@ aspect_m_pres <- aspect_m +
 elevation_m_pres <- elevation_m +
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -775,7 +775,7 @@ elevation_m_pres <- elevation_m +
 landuse_m_pres <- landuse_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -783,7 +783,7 @@ landuse_m_pres <- landuse_m +
 rain_drought_m_pres <- rain_drought_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -791,7 +791,7 @@ rain_drought_m_pres <- rain_drought_m +
 rain_flood_m_pres <- rain_flood_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -799,7 +799,7 @@ rain_flood_m_pres <- rain_flood_m +
 rugged_m_pres <- rugged_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -807,7 +807,7 @@ rugged_m_pres <- rugged_m +
 road_m_pres <- road_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -815,7 +815,7 @@ road_m_pres <- road_m +
 build_m_pres <- build_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
@@ -823,7 +823,7 @@ build_m_pres <- build_m +
 NVIS_m_pres <- NVIS_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = "BTRW presences")+
+  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
   guides(alpha = guide_legend(override.aes = list(size=3))) +
   coord_sf(clip = 'off')
 
