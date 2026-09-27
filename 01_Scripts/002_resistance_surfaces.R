@@ -461,13 +461,13 @@ HSM_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(a) Habitat suitability", subtitle = "") +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off') +
@@ -481,13 +481,13 @@ NDVI_m <-ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(b) NDVI", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.893"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off') +
@@ -500,13 +500,13 @@ rain_drought_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(c) Rainfall 1990-2010", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.877"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -520,13 +520,13 @@ rainfall_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(d) Rainfall", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.876"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -540,13 +540,13 @@ rain_flood_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(e) Rainfall 2011-2024", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.874"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -560,13 +560,13 @@ mintemp_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(f) Minimum temperature", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.863"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.title = element_text(hjust = 0),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
@@ -580,13 +580,13 @@ aspect_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(g) Aspect", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.760"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -601,13 +601,13 @@ rugged_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(h) Ruggedness", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.754"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -621,13 +621,13 @@ elevation_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(i) Elevation", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.713"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -640,13 +640,13 @@ landuse_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(j) Landuse", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.646"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -661,13 +661,13 @@ build_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(k) Buildings", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.516"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -680,13 +680,13 @@ NVIS_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(l) Broad vegetation group", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.469"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -700,13 +700,13 @@ road_m <- ggplot()+
   scale_fill_viridis_c(na.value = 'transparent', limits = c(0, 1)) +
   labs(fill = "Connectivity", title = "(m) Roads", subtitle = expression(paste("Pearson's ", italic("r"), " = 0.444"))) +
   annotation_scale(location = "bl", pad_y = unit(0.07, 'cm'), pad_x = unit(3, 'cm'), text_cex = 1.2)+
-  annotation_north_arrow(location = "bl", which_north = T, height = unit(.9, "cm"), width = unit(.45, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(5.8, 'cm'), style = north_arrow_fancy_orienteering) +
+  annotation_north_arrow(location = "bl", which_north = T, height = unit(1.2, "cm"), width = unit(.65, "cm"), pad_y = unit(0.05, "cm"), pad_x = unit(8.4, 'cm'), style = north_arrow_fancy_orienteering) +
   theme_bw() +
   theme_cowplot(font_size = 17)+
   theme(legend.key.height = unit(1, 'cm'),
         legend.key.width = unit(1, 'cm'),
-        legend.title = element_text(face = 'bold', size = 25),
-        legend.text = element_text(size = 20),
+        legend.title = element_text(face = 'bold', size = 16),
+        legend.text = element_text(size = 14),
         plot.background = element_blank(),
         plot.margin = unit(c(0.5, 0.1, 2.5, 0.1), "cm"))+
   coord_sf(clip = 'off')+
@@ -730,101 +730,101 @@ ggsave("./03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps.png"
 HSM_m_pres <- HSM_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 NDVI_m_pres <- NDVI_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 mintemp_m_pres <- mintemp_m +
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 rainfall_m_pres <- rainfall_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 aspect_m_pres <- aspect_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 elevation_m_pres <- elevation_m +
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 landuse_m_pres <- landuse_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 rain_drought_m_pres <- rain_drought_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 rain_flood_m_pres <- rain_flood_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 rugged_m_pres <- rugged_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 road_m_pres <- road_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 build_m_pres <- build_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
 NVIS_m_pres <- NVIS_m + 
   geom_spatvector(data = BTRW_cds, aes(alpha = 0.5), size = 1)+
   labs(alpha = "") +
-  scale_alpha_continuous(labels = expression(bold("BTRW presences")))+
-  guides(alpha = guide_legend(override.aes = list(size=3))) +
+  scale_alpha_continuous(labels = "BTRW presences")+
+  guides(alpha = guide_legend(override.aes = list(size=3), label.theme = element_text(size = 14, face = "bold"))) +
   coord_sf(clip = 'off')
 
 
@@ -836,7 +836,7 @@ cur_pres_maps <- plot_grid(HSM_m_pres + theme(legend.position = 'none'), NDVI_m_
                       nrow = 3, ncol = 6, rel_widths = c(1,1,1,1,1,0.5))
 
 cur_pres_maps
-ggsave("./03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps_wpres.png",  width = 55, height = 33.9, units = "cm", dpi = 300, limitsize = FALSE)
+ggsave("./03_Results/Plots/Circuitscape_Connectivity_maps/Connectivity_maps_wpres.png",  width = 65, height = 52, units = "cm", dpi = 300, limitsize = FALSE)
 
 
 
