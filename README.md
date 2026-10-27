@@ -1,4 +1,4 @@
-# Landscape connectivity analysis reveals restoration opportunities for population connectivity in a rocky outcrop habitat specialist
+# Data and Code: Landscape connectivity analysis reveals restoration opportunities for population connectivity in a rocky outcrop habitat specialist
 Analysis of the influence of environmental variation on landscape connectivity in the internationally vulnerable brush-tailed rock wallaby (_Petrogale penicillata_). 
 
 This project aimed to identify key habitat patches and potential movement corridors for brush-tailed rock-wallabies in southeast Queensland to inform spatial conservation prioritisation. We aimed to identify how natural environmental features influenced population connectivity, and determine the degree of population isolation geograpically and temporally. We then investigated spatially-explicit conservation priorities for restoration to promote connectivity and management of threats (e.g., fire, pests and predators) to reduce population declines.
